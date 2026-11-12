@@ -1,53 +1,55 @@
 # devops-lab
 
-Learning DevOps end-to-end: from a hello world app to a deployed, monitored service, one deliberate step at a time.
+Learning DevOps end-to-end: from a hello world app to a deployed service, one deliberate step at a time.
 
-## Run locally
+- **Why and how it's built:** [docs/pipeline.md](docs/pipeline.md)
+- **All documentation:** [docs/README.md](docs/README.md)
+- **Set up a machine:** [docs/how-to/setup.md](docs/how-to/setup.md)
 
-Requires Node.js 24.
+## Run with Docker
+
+Requires a Docker Engine. Node.js is not needed on the host.
 
 ```bash
-node server.js
+docker build -t devops-lab .
+docker run --rm --name devops-lab -p 3000:3000 devops-lab
 ```
 
-The server listens on port 3000. Test it from a second terminal:
+Test from a second terminal:
 
 ```bash
 curl -i http://localhost:3000
 ```
 
-Expected: status `200 OK`, `Content-Type: text/plain; charset=utf-8`, body `Hello world`.
+Expected: `200 OK`, `Content-Type: text/plain; charset=utf-8`, body `Hello world`.
 
-Stop the server with Ctrl+C. After changing `server.js`, restart it: Node reads the file only at startup.
+Stop it from a second terminal (Ctrl+C does not stop it, see limitations):
 
-## Run publicly (walking skeleton)
+```bash
+docker stop devops-lab
+```
 
-Exposes the local server on a temporary public HTTPS URL through a Cloudflare quick tunnel. No account and no router configuration needed. How it works and its risks: [spike DL-9](docs/spikes/DL-9-quick-tunnel.md).
+## Run publicly
 
-Requires `cloudflared` 2026.10.1, installed from the official GitHub release `.deb` with its SHA-256 checksum verified.
+Exposes the container on a temporary public HTTPS URL through a Cloudflare quick tunnel. How it works and its risks: [phase 2](docs/phases/phase-2-public-url/README.md).
 
-1. Start the server (terminal 1):
-
-   ```bash
-   node server.js
-   ```
-
+1. Start the container (terminal 1), as above.
 2. Start the tunnel (terminal 2):
 
    ```bash
    cloudflared tunnel --url http://localhost:3000
    ```
 
-3. Open the `https://<random>.trycloudflare.com` URL printed by `cloudflared`.
+3. Open the `https://<random>.trycloudflare.com` URL it prints.
 
-Stop both with Ctrl+C. Only this hello world server may be exposed this way.
+Only this hello world server may be exposed this way.
 
 ## Current limitations
 
-- Runs from the source folder, on a machine with Node.js installed.
+- The image is built by hand and exists only on this machine.
+- The image is ~1 GB, runs as root, and uses a movable base tag (`node:24`).
+- The container ignores stop signals: every stop waits 10 seconds, then the process is killed.
 - Two processes in two terminals must stay running; every step is manual.
 - Offline when the laptop sleeps, a terminal closes, or the server crashes, and nobody notices.
 - The public URL is random and changes on every tunnel restart.
-- Quick tunnels are meant for testing: no uptime guarantee.
-- Mistakes such as a typo in a method name are only discovered when a request arrives.
-- The port is hard-coded.
+- Mistakes such as a typo are only discovered when a request arrives.
