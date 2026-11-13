@@ -5,10 +5,31 @@ Commands used in this project, this project's Dockerfile, and common errors. Con
 ## This project
 
 ```bash
-docker build -t devops-lab .                                  # build the image
-docker run --rm --name devops-lab -p 3000:3000 devops-lab     # run it
-curl -i http://localhost:3000                                 # test (second terminal)
-docker stop devops-lab                                        # stop it (takes ~10 s)
+docker compose up -d --build     # build and start in the background
+docker compose ps                # list this project's containers
+docker compose logs app          # what the app printed
+curl -i http://localhost:8080    # test
+docker compose down              # stop and remove containers and network
+```
+
+## Docker Compose
+
+Compose reads `compose.yaml` and creates the containers it describes. It's a plugin for the `docker` command (Ubuntu package: `docker-compose-v2`), using the same engine. It runs on one machine only.
+
+| Command | What it does |
+|---|---|
+| `docker compose up -d` | Create and start all services in the background (`-d` = detached) |
+| `docker compose up -d --build` | Same, rebuilding images first |
+| `docker compose ps` | List this project's containers |
+| `docker compose logs <service>` | Show a service's output |
+| `docker compose down` | Stop and remove containers and the project network (images stay) |
+
+```yaml
+services:
+  app:            # service name; also its name on the Compose network
+    build: .      # build from ./Dockerfile (image: devops-lab-app)
+    ports:
+      - "8080:3000"   # host port 8080 → container port 3000 (quoted: YAML-safe)
 ```
 
 ## The Dockerfile, line by line

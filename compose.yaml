@@ -1,0 +1,6 @@
+services:
+  app:
+    build: .
+    ports:
+      # host : container
+      - "8080:3000"
