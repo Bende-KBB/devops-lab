@@ -1,6 +1,7 @@
 services:
   app:
     build: .
+    init: true
     ports:
       # host : container
       - "8080:3000"
