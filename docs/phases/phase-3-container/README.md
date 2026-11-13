@@ -80,7 +80,7 @@ Each step is one small change that solves one problem.
 | [1. Naive image](1-naive-image.md) | App needs Node.js on the host | A three-line `Dockerfile` |
 | [2. Compose](2-compose.md) | Run settings live in long commands | `compose.yaml` |
 | [3. Init process](3-init.md) | Every stop waits 10 s, then kills | `init: true` |
-| 4. Tunnel in a container | Second terminal; cloudflared runs as the user | Planned |
+| [4. Tunnel in a container](4-tunnel-container.md) | Second terminal; cloudflared runs as the user | `tunnel` service in `compose.yaml` |
 
 ## Result
 

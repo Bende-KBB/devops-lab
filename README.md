@@ -20,26 +20,20 @@ Expected: `200 OK`, `Content-Type: text/plain; charset=utf-8`, body `Hello world
 
 Port mapping: host port `8080` → container port `3000`. Configuration: [compose.yaml](compose.yaml).
 
-## Run publicly
+## Public URL
 
-Exposes the app on a temporary public HTTPS URL through a Cloudflare quick tunnel. How it works and its risks: [phase 2](docs/phases/phase-2-public-url/README.md).
+`docker compose up -d` also starts a Cloudflare quick tunnel (the `tunnel` service), which gives the app a temporary public HTTPS URL. Find it with:
 
-1. Start the app: `docker compose up -d`
-2. Start the tunnel (second terminal):
+```bash
+docker compose logs tunnel       # look for https://<random>.trycloudflare.com
+```
 
-   ```bash
-   cloudflared tunnel --url http://localhost:8080
-   ```
-
-3. Open the `https://<random>.trycloudflare.com` URL it prints.
-
-Only this hello world server may be exposed this way.
+The URL changes on every start. How the tunnel works and its risks: [phase 2](docs/phases/phase-2-public-url/README.md), [step 4 of phase 3](docs/phases/phase-3-container/4-tunnel-container.md). Only this hello world server may be exposed this way.
 
 ## Current limitations
 
 - The image is built by hand and exists only on this machine.
 - The image is ~1 GB, runs as root, and uses a movable base tag (`node:24`).
-- The tunnel needs a second terminal and runs directly as the Linux user.
-- Offline when the laptop sleeps, a terminal closes, or the server crashes, and nobody notices.
-- The public URL is random and changes on every tunnel restart.
+- Offline when the laptop sleeps or a container crashes, and nobody notices.
+- The public URL is random, changes on every start, and must be looked up in the logs.
 - Mistakes such as a typo are only discovered when a request arrives.

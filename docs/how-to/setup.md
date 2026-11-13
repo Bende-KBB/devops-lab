@@ -145,9 +145,9 @@ docker compose version         # Docker Compose version v2.x
 docker run --rm hello-world    # "Hello from Docker!"
 ```
 
-## 8. cloudflared (exact version, verified)
+## 8. Optional: cloudflared on the host
 
-Download one specific release instead of adding a third-party package repository, so updates happen only when chosen.
+The project runs `cloudflared` as a container (see `compose.yaml`), so this is only needed to run a tunnel outside Docker. Download one specific release instead of adding a third-party package repository, so updates happen only when chosen.
 
 1. On `https://github.com/cloudflare/cloudflared/releases`, pick a release **at least 14 days old**; note its version and the SHA256 of `cloudflared-linux-amd64.deb` from the release notes.
 2. Download, verify, install:
