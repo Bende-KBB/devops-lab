@@ -13,7 +13,7 @@ flowchart LR
     N --> C["✔ Second terminal,<br/>cloudflared runs as the user<br/>step 4: tunnel container"]
     N --> D["✔ ~1.6 GB image<br/>step 5: node:24-slim"]
     N --> E["✘ Runs as root"]
-    N --> F["✘ Movable base tag"]
+    N --> F["✔ Movable base tag<br/>step 6: pinned by digest"]
     N --> G["✘ App copied into /<br/>(accepted)"]
 ```
 
@@ -26,7 +26,7 @@ flowchart LR
 | Tunnel needs a second terminal and runs as the user | ✔ Fixed | Step 4: `tunnel` service, non-root, pinned by digest |
 | ~1.6 GB image | ✔ Fixed | Step 5: `node:24-slim`, 330 MB |
 | Runs as root | ✘ Open | Planned: step 7 |
-| Movable base tag | ✘ Open | Planned: step 6 |
+| Movable base tag | ✔ Fixed | Step 6: `node:24.22.3-slim@sha256:...` |
 | App copied into `/` | ✘ Accepted | Cosmetic; no security or size impact |
 
 ## New limitations introduced by this phase
@@ -38,6 +38,7 @@ flowchart LR
 | Compose runs on one machine only | No spreading load, no moving containers between machines |
 | The public URL appears only in the tunnel's logs | Looked up with `docker compose logs tunnel` after every start. Accepted: a stable address removes it |
 | No debugging tools inside the app container | `ps` and similar are missing since step 5. Intended for production images |
+| Base image updates are manual | Since step 6, security patches arrive only when someone updates the digest. Automation (Dependabot, Renovate) is out of scope |
 
 ## Limitations carried into the next phase
 
