@@ -1,11 +1,12 @@
-# Naive on purpose (walking skeleton). Known problems are listed in
-# docs/phases/phase-3-container/README.md and will be fixed one by one.
+# Image for the hello world server.
+# Open issues and history: docs/phases/phase-3-container/result.md
 
-# Start from the official Node.js 24 image (Debian + Node.js).
-FROM node:24
+# Base: official Node.js 24, "slim" variant: Debian without compilers
+# and build tools, which this dependency-free server doesn't need.
+FROM node:24-slim
 
 # Copy the server into the image.
 COPY server.js .
 
-# Command a container runs when it starts.
+# The command a container runs when it starts.
 CMD ["node", "server.js"]

@@ -18,14 +18,14 @@ docker compose down              # stop and remove containers and network
 ### Dockerfile
 
 ```dockerfile
-FROM node:24
+FROM node:24-slim
 COPY server.js .
 CMD ["node", "server.js"]
 ```
 
 | Line | Meaning |
 |---|---|
-| `FROM node:24` | Start from the official Node.js 24 image (Debian + Node.js) |
+| `FROM node:24-slim` | Start from the official Node.js 24 image, slim variant: minimal Debian, no build tools |
 | `COPY server.js .` | Copy `server.js` from the build context into the image's current folder (`/`, since none is set) |
 | `CMD ["node", "server.js"]` | The command a container runs when it starts |
 
@@ -75,7 +75,7 @@ services:
 | Command | What it does |
 |---|---|
 | `docker build -t <name> .` | Build an image from `./Dockerfile`. `.` is the **build context**: the only files `COPY` can use |
-| `docker image ls` | List stored images and sizes |
+| `docker image ls` | List stored images. *Disk usage* = unpacked on this machine; *content size* = compressed, as downloaded |
 | `docker pull <image>` | Download an image without running it |
 | `docker image inspect <image>` | Metadata: digest, user, entrypoint, command |
 | `docker image inspect --format '{{index .RepoDigests 0}}' <image>` | Print the image's digest, for pinning |
@@ -118,4 +118,5 @@ services:
 | `curl: (7) ... Connection refused` | Wrong port, or not published | Use `localhost:8080`; check `ports:` in `compose.yaml` |
 | `port is already allocated` | Something else uses host port 8080 | `docker ps`; stop it, or change the host side of the mapping |
 | Stop takes 10 s | No init process | `init: true` in `compose.yaml` |
+| `exec: "ps": executable file not found` | The slim image has no such tool | Expected; inspect from the host (`docker compose ps`, `docker compose logs`) |
 | Tunnel URL gives 502 Bad Gateway | Tunnel can't reach the app | Check `http://app:3000` (service name, **container** port) and that `app` is Up |

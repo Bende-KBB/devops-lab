@@ -11,10 +11,10 @@ flowchart LR
     N["Naive setup"] --> A["✔ Long docker run commands<br/>step 2: compose.yaml"]
     N --> B["✔ 10 s forced stop<br/>step 3: init: true"]
     N --> C["✔ Second terminal,<br/>cloudflared runs as the user<br/>step 4: tunnel container"]
-    N --> D["✘ ~1 GB image"]
+    N --> D["✔ ~1.6 GB image<br/>step 5: node:24-slim"]
     N --> E["✘ Runs as root"]
     N --> F["✘ Movable base tag"]
-    N --> G["✘ App copied into /"]
+    N --> G["✘ App copied into /<br/>(accepted)"]
 ```
 
 | Problem | Status | Fixed by |
@@ -24,10 +24,10 @@ flowchart LR
 | Settings live in long commands | ✔ Fixed | Step 2: `compose.yaml` |
 | Every stop waits 10 s, then kills | ✔ Fixed | Step 3: `init: true` |
 | Tunnel needs a second terminal and runs as the user | ✔ Fixed | Step 4: `tunnel` service, non-root, pinned by digest |
-| ~1 GB image | ✘ Open | Later hardening |
-| Runs as root | ✘ Open | Later hardening |
-| Movable base tag `node:24` | ✘ Open | Later hardening |
-| App copied into `/` | ✘ Open | Later hardening |
+| ~1.6 GB image | ✔ Fixed | Step 5: `node:24-slim`, 330 MB |
+| Runs as root | ✘ Open | Planned: step 7 |
+| Movable base tag | ✘ Open | Planned: step 6 |
+| App copied into `/` | ✘ Accepted | Cosmetic; no security or size impact |
 
 ## New limitations introduced by this phase
 
@@ -36,7 +36,8 @@ flowchart LR
 | Docker Engine runs as root; the `docker` group is root-equivalent | Anyone in the group controls the whole distro |
 | Containers share the host's kernel | Weaker isolation than a virtual machine |
 | Compose runs on one machine only | No spreading load, no moving containers between machines |
-| The public URL appears only in the tunnel's logs | It has to be looked up with `docker compose logs tunnel` after every start |
+| The public URL appears only in the tunnel's logs | Looked up with `docker compose logs tunnel` after every start. Accepted: a stable address removes it |
+| No debugging tools inside the app container | `ps` and similar are missing since step 5. Intended for production images |
 
 ## Limitations carried into the next phase
 

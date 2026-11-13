@@ -81,6 +81,9 @@ Each step is one small change that solves one problem.
 | [2. Compose](2-compose.md) | Run settings live in long commands | `compose.yaml` |
 | [3. Init process](3-init.md) | Every stop waits 10 s, then kills | `init: true` |
 | [4. Tunnel in a container](4-tunnel-container.md) | Second terminal; cloudflared runs as the user | `tunnel` service in `compose.yaml` |
+| [5. Smaller base image](5-slim-base-image.md) | ~1.6 GB image | `FROM node:24-slim` |
+| 6. Pinned base image | A rebuild can silently change the image | Planned |
+| 7. Non-root user | The app runs as root | Planned |
 
 ## Result
 
