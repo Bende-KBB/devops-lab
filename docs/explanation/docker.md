@@ -215,7 +215,30 @@ Fixes: run a tiny init process as PID 1 that forwards signals (`docker run --ini
 
 ---
 
-## 9. Where the engine runs (on WSL)
+## 9. Docker Compose: containers described in a file
+
+`docker run` takes every setting as a command-line option, so the configuration exists only in someone's typing. **Docker Compose** moves those settings into a file, `compose.yaml`, and creates the containers it describes.
+
+```mermaid
+flowchart LR
+    F["compose.yaml<br/>(what should run)"] --> C["docker compose up"]
+    C --> E["Docker Engine"]
+    E --> N["Project network"]
+    E --> A["Container: app"]
+    E --> T["Container: tunnel"]
+    A --- N
+    T --- N
+```
+
+- **Declarative:** the file says *what* should exist (services, ports, settings), not the steps to create it. Compose works out the steps. Kubernetes and Helm use the same idea.
+- **Services:** each entry under `services:` becomes a container. Its name is also its address on the project network.
+- **Project network:** Compose creates a private network for the project's containers. They reach each other by service name (`http://app:3000`); `localhost` inside a container means that container itself.
+- **One machine only:** Compose runs containers on a single engine. Spreading them over many machines, and restarting them anywhere, is what Kubernetes is for.
+- **A plugin, not a new engine:** `docker compose` is an extension of the `docker` command and uses the same engine.
+
+---
+
+## 10. Where the engine runs (on WSL)
 
 ```mermaid
 flowchart TB

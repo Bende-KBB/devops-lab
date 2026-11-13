@@ -1,15 +1,17 @@
 # Phase 3: Container
 
-## Problem
+**Status:** in progress
 
-1. The app only runs on a machine prepared by hand: Node.js installed, the source folder present.
-2. The server runs with the laptop user's full permissions: a bug could reach SSH keys and Windows files.
+## The problems this phase solves
 
-This is the classic **"it works on my machine"** problem.
+1. **The app only runs on a machine prepared by hand:** Node.js must be installed, and it runs from the source folder.
+2. **The server runs with the laptop user's full permissions:** a bug in it could reach SSH keys, the repository, and Windows files.
 
-## Solution
+Both are versions of the classic **"it works on my machine"** problem.
 
-Package the app **together with the exact runtime it needs** into an **image**, and run it as a **container**: an isolated process that sees only the image's files.
+## The tool: Docker
+
+Docker packages an application **together with the exact runtime it needs** into an **image**, and runs that image as a **container**: an isolated process that sees only the image's files.
 
 ```mermaid
 flowchart LR
@@ -21,14 +23,21 @@ flowchart LR
     end
 ```
 
+**Why Docker:** it's the industry standard for packaging applications, its image format is an open standard (OCI), and every later tool in this pipeline (CI, registries, Kubernetes, Argo CD) works with images. Nothing after this phase is possible without them.
+
+**Docker Compose** is part of the same toolset: a plugin that reads the container settings from a file instead of from long commands.
+
+### "Works on my machine" is two problems
+
 ```mermaid
-flowchart LR
-    D["Dockerfile<br/>+ server.js"] -->|"docker build"| I["Image"]
-    I -->|"docker run -p 3000:3000"| C["Container"]
-    C --> T["Quick tunnel"] --> V["Visitor"]
+flowchart TD
+    W["It works on my machine"] --> A["RUNNING the app elsewhere<br/>(servers, CI, Kubernetes)"]
+    W --> B["DEVELOPING the app elsewhere<br/>(other developers)"]
+    A --> A1["Needs: app + runtime only<br/>→ application image: this phase"]
+    B --> B1["Needs: the full toolchain<br/>→ dev containers: not needed here,<br/>solved by the WSL setup"]
 ```
 
-## The idea, as an analogy
+## The analogy: food trucks
 
 So far, the dish could only be cooked in one kitchen that was set up by hand. To serve customers anywhere, the restaurant builds **food trucks**.
 
@@ -36,7 +45,8 @@ So far, the dish could only be cooked in one kitchen that was set up by hand. To
 - The **workshop** follows the plan and produces a **sealed truck model**, identical every time.
 - The model can be copied any number of times. Each **copy, open for business**, serves customers. Closing a copy doesn't change the model.
 - Finished models are kept in a **depot**, from which any city can fetch them.
-- A city's **truck service** builds, stores, and opens the trucks. Whoever controls the truck service controls every truck.
+- For an event, an organizer works from a **site plan**: one sheet listing which trucks come, where they park, and which serving window faces the street. One call to the organizer sets up the whole site.
+- On the site, trucks talk to each other **by name** over a private service road. Only the windows listed on the plan face the public street.
 
 | Kitchen | Docker |
 |---|---|
@@ -45,73 +55,35 @@ So far, the dish could only be cooked in one kitchen that was set up by hand. To
 | Sealed truck model | Image |
 | The model's serial number | Image digest (`sha256:...`) |
 | A copy, open for business | Container |
-| Opening a copy | `docker run` |
 | Depot | Registry (Docker Hub, GHCR) |
-| City's truck service | Docker Engine |
+| Site plan | `compose.yaml` |
+| Calling the organizer | `docker compose up` |
+| Private service road; trucks addressed by name | Project network; services addressed by name |
+| Window facing the street | Published port (`8080:3000`) |
 
-## "Works on my machine" is two problems
-
-```mermaid
-flowchart TD
-    W["It works on my machine"] --> A["RUNNING the app elsewhere<br/>servers, CI, Kubernetes"]
-    W --> B["DEVELOPING the app elsewhere<br/>other developers"]
-    A --> A1["Needs: app + runtime only<br/>→ application image (this phase)"]
-    B --> B1["Needs: full toolchain<br/>→ dev containers (not needed here:<br/>solved by the WSL setup)"]
-```
-
-This phase solves the first one. Everything after it (CI, registries, Kubernetes, Argo CD) moves and runs application images.
-
-## Why Docker
-
-The industry standard for packaging applications. Its image format is an open standard (OCI), and every later tool in this pipeline works with images. Nothing after this phase is possible without them.
-
-## What we tested
-
-| Experiment | Result | Lesson |
-|---|---|---|
-| `docker run node:24 node -v` | v24.22.2 (host has v24.22.1) | The container brings its own runtime; `node:24` is a **movable tag** |
-| Shell in `ubuntu:26.04`: `ls /home`, `ls /mnt` | No user home, no Windows drive | A container sees only its image's files |
-| `uname -r` inside and outside | Same kernel | A container is **not a virtual machine**: one shared kernel |
-| `ps aux` on the host | The container's shell is visible, as **root** | A container is a normal, restricted process; root inside is root on the kernel |
-| Mount a folder, create a file | File appears on the host, owned by root | Access to host files only through explicit mounts |
-| `docker run` without `-p`, then `curl` | Connection refused | A container has **its own network** |
-| `docker run -p 3000:3000`, then `curl` | `200 Hello world` | Publishing a port connects host and container |
-| Ctrl+C on the running container | Nothing happens | The server is **process 1**; unhandled stop signals are ignored |
-| `time docker stop` | ~10 seconds | Docker asks politely, waits 10 s, then kills |
-| `docker exec ... whoami` | `root` | The image never names a user |
-
-## Cost and trade-offs
+## Trade-offs
 
 | Gain | Cost |
 |---|---|
 | Runs the same wherever a Docker Engine exists | A new root-level background service |
 | The app can't see the host's files, keys, or processes | Using Docker without `sudo` means root-equivalent rights (`docker` group) |
 | One self-contained artifact with a unique ID | The naive image is ~1 GB |
-| | New concepts: images, containers, registries, ports, signals |
+| Configuration lives in a file, reviewed like code | New concepts: images, containers, registries, ports, networks, signals |
 | | Weaker isolation than a virtual machine: one shared kernel |
 
-## The naive image, and what's wrong with it
+## Steps
 
-```dockerfile
-FROM node:24
-COPY server.js .
-CMD ["node", "server.js"]
-```
+Each step is one small change that solves one problem.
 
-Deliberately the simplest that works. Its problems were observed, not assumed:
+| Step | Problem | Change |
+|---|---|---|
+| [1. Naive image](1-naive-image.md) | App needs Node.js on the host | A three-line `Dockerfile` |
+| [2. Compose](2-compose.md) | Run settings live in long commands | `compose.yaml` |
+| [3. Init process](3-init.md) | Every stop waits 10 s, then kills | `init: true` |
+| 4. Tunnel in a container | Second terminal; cloudflared runs as the user | Planned |
 
-| Problem | Consequence |
-|---|---|
-| ~1 GB for a few hundred bytes of code | Slow to move; large attack surface |
-| Runs as root | A server bug is a root process on the shared kernel |
-| Ignores stop signals | Every stop waits 10 s, then a forced kill |
-| App copied into `/` | Mixed in with operating system files |
-| Movable base tag `node:24` | A rebuild can silently produce a different image |
+## Result
 
-## Limitations
+What's fixed, what's open, and what's new: [result.md](result.md).
 
-- The image is built by hand and exists only on the laptop → **Phase 4 (CI)**.
-- The naive image's problems above.
-- Everything from phase 2 still applies to the tunnel.
-
-How Docker works in detail: [explanation/docker.md](../../explanation/docker.md). Commands: [reference/docker-commands.md](../../reference/docker-commands.md).
+Deeper reading: [how Docker works](../../explanation/docker.md) · [Docker cheat sheet](../../cheatsheets/docker.md)
