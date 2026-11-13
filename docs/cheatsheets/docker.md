@@ -8,6 +8,7 @@ Commands, this project's files line by line, and common errors. Concepts: [expla
 docker compose up -d --build     # build the image and start in the background
 docker compose ps                # list this project's containers
 docker compose logs app          # what the app printed
+docker compose logs tunnel       # includes the public https://...trycloudflare.com URL
 curl -i http://localhost:8080    # test
 docker compose down              # stop and remove containers and network
 ```
@@ -37,6 +38,12 @@ services:
     init: true
     ports:
       - "8080:3000"
+
+  tunnel:
+    image: cloudflare/cloudflared@sha256:<digest>
+    command: ["tunnel", "--url", "http://app:3000"]
+    depends_on:
+      - app
 ```
 
 | Line | Meaning |
@@ -46,6 +53,11 @@ services:
 | `build: .` | Build from `./Dockerfile`; the image is named `devops-lab-app` |
 | `init: true` | Run `docker-init` as process 1, which forwards stop signals; stops take ~1 s instead of 10 |
 | `"8080:3000"` | Host port 8080 → container port 3000 (quoted: YAML-safe) |
+| `tunnel:` | Second service: Cloudflare's `cloudflared` image |
+| `image: ...@sha256:...` | Pinned by digest (version 2026.10.1) |
+| `command:` | Arguments for the image's built-in `cloudflared` program |
+| `http://app:3000` | The app by service name and container port, on the project network |
+| `depends_on:` | Start `app` first |
 
 ## Docker Compose
 
@@ -106,3 +118,4 @@ services:
 | `curl: (7) ... Connection refused` | Wrong port, or not published | Use `localhost:8080`; check `ports:` in `compose.yaml` |
 | `port is already allocated` | Something else uses host port 8080 | `docker ps`; stop it, or change the host side of the mapping |
 | Stop takes 10 s | No init process | `init: true` in `compose.yaml` |
+| Tunnel URL gives 502 Bad Gateway | Tunnel can't reach the app | Check `http://app:3000` (service name, **container** port) and that `app` is Up |
