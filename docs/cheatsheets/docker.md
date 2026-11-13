@@ -18,14 +18,14 @@ docker compose down              # stop and remove containers and network
 ### Dockerfile
 
 ```dockerfile
-FROM node:24-slim
+FROM node:24.22.3-slim@sha256:dc26ae92c9fb15cf6b1d63e20f0944b2efe0f115b20e00be48fb23fceb061c54
 COPY server.js .
 CMD ["node", "server.js"]
 ```
 
 | Line | Meaning |
 |---|---|
-| `FROM node:24-slim` | Start from the official Node.js 24 image, slim variant: minimal Debian, no build tools |
+| `FROM node:24.22.3-slim@sha256:...` | Official Node.js image, slim variant (minimal Debian, no build tools). Pinned by digest: Docker uses the `sha256` and ignores the tag; the tag tells humans the exact version |
 | `COPY server.js .` | Copy `server.js` from the build context into the image's current folder (`/`, since none is set) |
 | `CMD ["node", "server.js"]` | The command a container runs when it starts |
 
@@ -58,6 +58,21 @@ services:
 | `command:` | Arguments for the image's built-in `cloudflared` program |
 | `http://app:3000` | The app by service name and container port, on the project network |
 | `depends_on:` | Start `app` first |
+
+## Updating the base image
+
+The base image is pinned by digest, so updates never happen by themselves.
+
+```bash
+docker pull node:24-slim                                                  # newest image of the major version
+docker run --rm node:24-slim node -v                                      # which Node.js version it contains
+docker image inspect --format '{{index .RepoDigests 0}}' node:24-slim     # its digest
+docker image inspect --format '{{.Created}}' node:24-slim                 # when it was built
+```
+
+1. **New Node.js version?** Wait 14 days after its release, unless it's a **security release** (check the Node.js release notes): then adopt directly and document it. **Same version, new build** (operating system patches only)? Adopt directly.
+2. Write `node:<version>-slim@<digest>` in the `FROM` line.
+3. `docker compose up -d --build`, then `curl -i http://localhost:8080` and `docker compose exec app node -v`.
 
 ## Docker Compose
 
