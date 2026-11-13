@@ -33,7 +33,7 @@ The URL changes on every start. How the tunnel works and its risks: [phase 2](do
 ## Current limitations
 
 - The image is built by hand and exists only on this machine.
-- The image is ~1 GB, runs as root, and uses a movable base tag (`node:24`).
+- The image runs as root and uses a movable base tag (`node:24-slim`).
 - Offline when the laptop sleeps or a container crashes, and nobody notices.
 - The public URL is random, changes on every start, and must be looked up in the logs.
 - Mistakes such as a typo are only discovered when a request arrives.
