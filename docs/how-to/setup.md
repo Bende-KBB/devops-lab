@@ -126,9 +126,11 @@ Docker Desktop's engine would be shared with every integrated distro. This distr
 2. Install:
 
 ```bash
-sudo apt install -y docker.io docker-buildx
+sudo apt install -y docker.io docker-buildx docker-compose-v2
 sudo usermod -aG docker $USER
 ```
+
+`docker-compose-v2` is the Compose plugin: it adds the `docker compose` command, using the same engine.
 
 `usermod -aG docker` adds the user to the `docker` group so `docker` works without `sudo`. **This is root-equivalent**: anyone in the group can start a container that mounts the whole filesystem. Accepted only because this distro is dedicated to the project.
 
@@ -139,6 +141,7 @@ Restart the distro (PowerShell): `wsl --terminate devops-lab`, then reopen it.
 ```bash
 systemctl is-active docker     # active
 docker version                 # shows Client AND Server
+docker compose version         # Docker Compose version v2.x
 docker run --rm hello-world    # "Hello from Docker!"
 ```
 
@@ -189,11 +192,9 @@ nvm install 24.22.1
 
 ```bash
 cd ~/devops-lab
-docker build -t devops-lab .
-docker run --rm --name devops-lab -p 3000:3000 devops-lab
-# second terminal:
-curl -i http://localhost:3000      # 200 Hello world
-docker stop devops-lab
+docker compose up -d --build
+curl -i http://localhost:8080      # 200 Hello world
+docker compose down
 ```
 
 ## Troubleshooting
