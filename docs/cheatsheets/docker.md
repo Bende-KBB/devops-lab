@@ -29,7 +29,7 @@ docker image inspect --format '{{.Created}}' node:24-slim                 # when
 ```
 
 1. **New Node.js version?** Wait 14 days after its release, unless it's a **security release** (check the Node.js release notes): then adopt directly and document it. **Same version, new build** (operating system patches only)? Adopt directly.
-2. Write `node:<version>-slim@<digest>` in the `FROM` line.
+2. Write `node:<version>-slim@<digest>` in **both** places: the `FROM` line of the `Dockerfile`, and the `smoke-test` service's `image:` in `compose.yaml`.
 3. `docker compose up -d`, then `curl -i http://localhost:8080` and `docker compose exec app node -v`.
 
 ## Docker Compose
@@ -38,6 +38,7 @@ docker image inspect --format '{{.Created}}' node:24-slim                 # when
 |---|---|
 | `docker compose up -d` | Create and start all services in the background (`-d` = detached) |
 | `docker compose up --wait` | Start in the background; return only once every service is healthy (or running, if it has no health check) |
+| `docker compose run --rm <service>` | Run a one-off container for a service (dependencies first), return its exit code, and delete it afterwards (`--rm`) |
 | `docker compose up -d --build` | Force a rebuild. Not needed in this project: `pull_policy: build` always rebuilds |
 | `docker compose ps` | List this project's containers |
 | `docker compose logs <service>` | Show a service's output (`-f` to follow) |
@@ -95,3 +96,4 @@ docker image inspect --format '{{.Created}}' node:24-slim                 # when
 | `exec: "ps": executable file not found` | The slim image has no such tool | Expected; inspect from the host (`docker compose ps`, `docker compose logs`) |
 | Tunnel URL gives 502 Bad Gateway | Tunnel can't reach the app | Check `http://app:3000` (service name, **container** port) and that `app` is Up |
 | `container ... is unhealthy` | The health check keeps failing | `docker compose logs app`; `docker inspect --format '{{json .State.Health}}' devops-lab-app-1` shows the last check results |
+| `dependency failed to start: container ... is unhealthy` | The app's health check failed, so the test never started | `docker compose logs app` |
