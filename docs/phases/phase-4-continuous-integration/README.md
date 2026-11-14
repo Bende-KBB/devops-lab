@@ -7,6 +7,7 @@
 - **The image is built by hand:** nothing checks that a change still builds or still works. A broken change can be merged unnoticed.
 - **The image exists only on the laptop:** nothing else can get it.
 - **`main` accepts anything:** a failing change can still be merged.
+- **Nobody knows when the app is ready:** "running" isn't "ready." The health check added for this is also a runtime feature that Kubernetes builds on in Phase 5.
 
 ## The tool: GitHub Actions
 
@@ -40,6 +41,8 @@ flowchart LR
 | Gate to the official plan book | Branch protection on `main` |
 | Public depot | GHCR |
 
+How workflows, jobs, and steps work: [GitHub Actions, explained](../../explanation/github-actions.md).
+
 ## Trade-offs
 
 | Gain | Cost |
@@ -56,7 +59,7 @@ flowchart LR
 |---|---|---|---|
 | [1. Build the image on every PR](1-build-image-on-every-pr.md) | A broken `Dockerfile` can be merged unnoticed | Workflow runs `docker build` | Done |
 | [2. Always rebuild the app image](2-always-rebuild-the-app-image.md) | Forgetting `--build` silently runs an old image | `pull_policy: build` | Done |
-| 3. Start the tunnel only on request | `docker compose up` could expose any machine to the internet | `public` profile | Planned |
-| 4. Smoke-test the app on every PR | "It builds" doesn't mean "it works" | Smoke-test script; CI starts the app via Compose | Planned |
+| [3. Add a health check](3-add-a-health-check.md) | Nobody knows whether the app is ready or alive | Compose `healthcheck`; CI `up --wait` | Done |
+| 4. Smoke-test the app on every PR | "It builds" doesn't mean "it works" | `node --test` in a Compose service | Planned |
 | 5. Publish the image to GHCR | The image exists only on the laptop | Merges to `main` push the image | Planned |
 | 6. Require the CI check before merging | `main` accepts failing PRs | Branch protection | Planned |

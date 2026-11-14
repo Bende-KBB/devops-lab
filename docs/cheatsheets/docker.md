@@ -13,55 +13,9 @@ curl -i http://localhost:8080    # test
 docker compose down              # stop and remove containers and network
 ```
 
-## Project files, line by line
+## Project files
 
-### Dockerfile
-
-```dockerfile
-FROM node:24.22.3-slim@sha256:dc26ae92c9fb15cf6b1d63e20f0944b2efe0f115b20e00be48fb23fceb061c54
-COPY server.js .
-USER node
-CMD ["node", "server.js"]
-```
-
-| Line | Meaning |
-|---|---|
-| `FROM node:24.22.3-slim@sha256:...` | Official Node.js image, slim variant (minimal Debian, no build tools). Pinned by digest: Docker uses the `sha256` and ignores the tag; the tag tells humans the exact version |
-| `COPY server.js .` | Copy `server.js` from the build context into the image's current folder (`/`, since none is set) |
-| `USER node` | Run everything after this line, including the command, as the unprivileged `node` user (UID 1000) instead of root |
-| `CMD ["node", "server.js"]` | The command a container runs when it starts |
-
-### compose.yaml
-
-```yaml
-services:
-  app:
-    build: .
-    pull_policy: build
-    init: true
-    ports:
-      - "8080:3000"
-
-  tunnel:
-    image: cloudflare/cloudflared@sha256:<digest>
-    command: ["tunnel", "--url", "http://app:3000"]
-    depends_on:
-      - app
-```
-
-| Line | Meaning |
-|---|---|
-| `services:` | The containers this project runs |
-| `app:` | Service name; also its address on the project network |
-| `build: .` | Build from `./Dockerfile`; the image is named `devops-lab-app` |
-| `pull_policy: build` | Always build from source on `up`, even if the image exists. Without it, `up` reuses an existing image and changed code is silently ignored |
-| `init: true` | Run `docker-init` as process 1, which forwards stop signals; stops take ~1 s instead of 10 |
-| `"8080:3000"` | Host port 8080 → container port 3000 (quoted: YAML-safe) |
-| `tunnel:` | Second service: Cloudflare's `cloudflared` image |
-| `image: ...@sha256:...` | Pinned by digest (version 2026.10.1) |
-| `command:` | Arguments for the image's built-in `cloudflared` program |
-| `http://app:3000` | The app by service name and container port, on the project network |
-| `depends_on:` | Start `app` first |
+The files explain themselves in their comments: [Dockerfile](../../Dockerfile), [compose.yaml](../../compose.yaml).
 
 ## Updating the base image
 
@@ -83,6 +37,7 @@ docker image inspect --format '{{.Created}}' node:24-slim                 # when
 | Command | What it does |
 |---|---|
 | `docker compose up -d` | Create and start all services in the background (`-d` = detached) |
+| `docker compose up --wait` | Start in the background; return only once every service is healthy (or running, if it has no health check) |
 | `docker compose up -d --build` | Force a rebuild. Not needed in this project: `pull_policy: build` always rebuilds |
 | `docker compose ps` | List this project's containers |
 | `docker compose logs <service>` | Show a service's output (`-f` to follow) |
@@ -139,3 +94,4 @@ docker image inspect --format '{{.Created}}' node:24-slim                 # when
 | Stop takes 10 s | No init process | `init: true` in `compose.yaml` |
 | `exec: "ps": executable file not found` | The slim image has no such tool | Expected; inspect from the host (`docker compose ps`, `docker compose logs`) |
 | Tunnel URL gives 502 Bad Gateway | Tunnel can't reach the app | Check `http://app:3000` (service name, **container** port) and that `app` is Up |
+| `container ... is unhealthy` | The health check keeps failing | `docker compose logs app`; `docker inspect --format '{{json .State.Health}}' devops-lab-app-1` shows the last check results |
