@@ -1,3 +1,12 @@
+# Publish image: on every merge to main, test that commit, then publish exactly the tested image to GHCR.
+
+# Security:
+# - Registry write access (packages: write) exists only in push-image-to-ghcr
+# - Publishing happens only on main, and only after the tests pass (needs)
+# - The published image is the tested artifact, never rebuilt
+# - Actions are pinned by full commit SHA
+# - Secrets reach scripts only as environment variables, never as script text
+
 name: Publish image
 
 on:
@@ -12,3 +21,44 @@ jobs:
     uses: ./.github/workflows/ci.yml  # same build and test as on pull requests
     with:
       save-image: true  # keep the tested image as an artifact of this run
+
+  push-image-to-ghcr:
+    needs: build-and-test-main  # only after the tests on main pass
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10  # stop the job if anything hangs
+    permissions:
+      packages: write  # push to GHCR; nothing else (no checkout needed)
+    steps:
+      # 1. Get the tested image onto this VM.
+      - name: Download the tested image
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
+        with:
+          name: devops-lab-app-image
+
+      - name: Load the tested image into Docker
+        run: docker load --input devops-lab-app.tar
+
+      # 2. Name it for the registry: ghcr.io/<owner>/<repo>:sha-<commit>.
+      - name: Set the image name
+        # ,, = lowercase: registry names must be lowercase.
+        # GITHUB_ENV makes IMAGE available to all later steps.
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}:sha-${GITHUB_SHA}" >> "$GITHUB_ENV"
+
+      - name: Tag the image for GHCR
+        run: docker tag devops-lab-app "$IMAGE"  # adds a name; the image itself is unchanged
+
+      # 3. Publish it.
+      - name: Log in to GHCR
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # this job's token, expires when the job ends
+        # The token goes through stdin: never in the script text or the command line.
+        run: echo "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+
+      - name: Push the image to GHCR
+        run: docker push "$IMAGE"
+
+      # 4. Show what was published on the run's Summary page.
+      - name: Show the published image in the run summary
+        run: |
+          echo "Image: \`$IMAGE\`" >> "$GITHUB_STEP_SUMMARY"
+          docker buildx imagetools inspect "$IMAGE" | grep '^Digest:' >> "$GITHUB_STEP_SUMMARY"
