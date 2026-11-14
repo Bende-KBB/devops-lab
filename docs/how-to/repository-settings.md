@@ -46,6 +46,22 @@ Locally, `git config --global fetch.prune true` removes references to deleted br
 | Secret scanning | On | Detects tokens and keys in the repository |
 | Push protection | On | **Blocks a push** containing something that looks like a secret, before it becomes public |
 
+## Actions
+
+**Settings → Actions → General**
+
+| Setting | Value | Why |
+|---|---|---|
+| Actions permissions | Allow owner's, and select non-owner, actions and reusable workflows | Only chosen actions can run |
+| → Allow actions created by GitHub | Off | The explicit list below is stricter |
+| → Allow actions by Marketplace verified creators | Off | |
+| → Allowed actions | `actions/checkout@*`, `actions/upload-artifact@*`, `actions/download-artifact@*` | Adding a new action is a deliberate settings change |
+| Require actions to be pinned to a full-length commit SHA | On | A workflow using a tag (`@v7`) fails |
+| Approval for running fork pull request workflows | Require approval for all external contributors | No outside pull request runs a workflow without the owner's approval |
+| Workflow permissions | Read repository contents and packages permissions | The default token is read-only; jobs request more explicitly |
+| Allow GitHub Actions to create and approve pull requests | Off | A workflow must never approve its own changes |
+| Artifact and log retention | 90 days (default) | Individual artifacts can set less (`retention-days`) |
+
 ## Verify
 
 ```bash
