@@ -1,13 +1,20 @@
 services:
   app:
     build: .
-    pull_policy: build  # Always build from source on "up", so the running app matches the code.
-    init: true
+    pull_policy: build  # rebuild on every "up": the running app always matches the code
+    init: true          # init process as PID 1 forwards stop signals: stops take ~1s, not 10
     ports:
-      - "8080:3000"     # host : container
-  
+      - "8080:3000"     # host:container
+    healthcheck:
+      # exit 0 = healthy; the slim image has no curl, so Node's built-in fetch checks the app
+      test: ["CMD", "node", "-e", "fetch('http://localhost:3000').then(r => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+      interval: 10s     # check every 10s
+      timeout: 3s       # a slower check counts as failed
+      retries: 3        # unhealthy after 3 failures in a row
+      start_period: 5s  # failures in the first 5s don't count
+
   tunnel:
-    image: cloudflare/cloudflared@sha256:a15a3b50b8dabd57ac2090e9484c0247dba9dfa1f0df4d298d4317f9d69eb2d5
-    command: ["tunnel", "--url", "http://app:3000"]
+    image: cloudflare/cloudflared@sha256:a15a3b50b8dabd57ac2090e9484c0247dba9dfa1f0df4d298d4317f9d69eb2d5  # 2026.10.1
+    command: ["tunnel", "--url", "http://app:3000"]  # app:3000 = service name : container port
     depends_on:
       - app
