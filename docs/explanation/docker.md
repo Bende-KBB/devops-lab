@@ -259,6 +259,19 @@ flowchart TB
 
 ---
 
+## 11. What's in the image, and what's decided at start
+
+| Inside the image (`Dockerfile`) | Decided when a container starts (`compose.yaml`, `docker run`, later Kubernetes) |
+|---|---|
+| Files (`COPY`) | Port mapping |
+| Default command (`CMD`) | `init` process |
+| Default user (`USER`) | Health check (can also be in the image, but Kubernetes ignores that version) |
+| Environment defaults (`ENV`) | Networks, dependencies, overrides |
+
+Whatever starts the image must provide the right-hand column itself. Example: `docker run` without `--init` starts the app with Node.js as process 1, so it ignores the stop signal and is killed after 10 seconds.
+
+---
+
 ## Command summary
 
 | Command | What it does |
