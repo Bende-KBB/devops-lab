@@ -1,7 +1,8 @@
 name: CI
 
 on:
-  pull_request:  # every pull request: opened or updated
+  pull_request:   # every pull request: opened or updated
+  workflow_call:  # other workflows can call this one
 
 permissions:
   contents: read  # the automatic token can only read the repository

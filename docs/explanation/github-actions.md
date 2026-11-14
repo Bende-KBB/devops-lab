@@ -1,13 +1,13 @@
 # GitHub Actions, Explained
 
-How workflows, jobs, and steps fit together, and what they share. The workflow itself: [`.github/workflows/ci.yml`](../../.github/workflows/ci.yml).
+How workflows, jobs, and steps fit together, and what they share. The workflow itself: [.github/workflows/ci.yml](../../.github/workflows/ci.yml).
 
 ## The hierarchy
 
 ```mermaid
 flowchart TD
     R["Repository"] --> W1["Workflow: ci.yml<br/>name: CI<br/>on: pull_request"]
-    R --> W2["Workflow: publish.yml<br/>(example)<br/>on: push to main"]
+    R -->  W2["Workflow: publish.yml<br/>name: Publish<br/>on: push to main"]
     W1 --> J1["Job: build-and-test<br/>own fresh VM"]
     W1 --> J2["Job: lint<br/>(example)<br/>own fresh VM"]
     J1 --> S1["Step: check out"]
@@ -31,6 +31,21 @@ flowchart TD
 | Order | Sequential; a failure skips the rest, unless `if: failure()` or `always()` | Parallel, unless `needs:` |
 | Token permissions | The job's | Per workflow, adjustable per job |
 | Result on the PR | One check together | One check each |
+
+## Reusable workflows
+
+A workflow with the trigger `on: workflow_call` can be **called** by other workflows, like a function.
+
+```yaml
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+```
+
+- **The caller's job has no `runs-on` and no `steps`:** the called workflow brings its own jobs.
+- **Shown as** `<caller job> / <called job>`, for example **ci / build-and-test**.
+- **Permissions:** the caller sets the maximum; the called workflow can only reduce them.
+- **Why:** steps defined once can't drift apart between workflows.
 
 ## The runner
 
