@@ -33,6 +33,7 @@ flowchart TD
 | [phases/phase-3-container](phases/phase-3-container/README.md) | Packaging and running the app with Docker |
 | [explanation/docker.md](explanation/docker.md) | How Docker works: images, containers, kernel, ports, signals, Compose |
 | [explanation/github-actions.md](explanation/github-actions.md) | How GitHub Actions works: workflows, jobs, steps, what they share |
+| [explanation/analogy.md](explanation/analogy.md) | One analogy for the whole project, with a diagram per phase |
 
 ### Technical
 
