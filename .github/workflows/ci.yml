@@ -1,18 +1,22 @@
 name: CI
 
 on:
-  pull_request:   # runs on every pull request
+  pull_request:  # every pull request: opened or updated
 
 permissions:
-  contents: read  # The automatic token may only read the repository.
+  contents: read  # the automatic token can only read the repository
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-24.04
+    timeout-minutes: 10  # stop the job if anything hangs
     steps:
-      # Copy the repository onto the runner. Pinned by commit SHA.
       - name: Check out the repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
-      - name: Build and Start the app   # Only the app, exactly as configured in compose.yaml
-        run: docker compose up -d app
+      - name: Build and start the app, wait until healthy
+        run: docker compose up --wait app  # the app only, never the tunnel
+
+      - name: Show the app's logs if a step failed
+        if: failure()
+        run: docker compose logs app
