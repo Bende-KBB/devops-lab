@@ -1,10 +1,10 @@
 services:
   app:
     build: .
+    pull_policy: build  # Always build from source on "up", so the running app matches the code.
     init: true
     ports:
-      # host : container
-      - "8080:3000"
+      - "8080:3000"     # host : container
   
   tunnel:
     image: cloudflare/cloudflared@sha256:a15a3b50b8dabd57ac2090e9484c0247dba9dfa1f0df4d298d4317f9d69eb2d5
