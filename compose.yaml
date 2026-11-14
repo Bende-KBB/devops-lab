@@ -18,3 +18,17 @@ services:
     command: ["tunnel", "--url", "http://app:3000"]  # app:3000 = service name : container port
     depends_on:
       - app
+
+  smoke-test:
+    image: node:24.22.3-slim@sha256:dc26ae92c9fb15cf6b1d63e20f0944b2efe0f115b20e00be48fb23fceb061c54  # 24.22.3
+    profiles: ["test"]  # not started by "up"; run with: docker compose run --rm smoke-test
+    user: node          # no root needed to read tests and send requests
+    working_dir: /tests
+    command: ["node", "--test", "--test-reporter=spec"]  # runs every *.test.mjs in /tests
+    volumes:
+      - ./tests:/tests:ro  # the tests, read-only
+    environment:
+      BASE_URL: http://app:3000  # service name : container port
+    depends_on:
+      app:
+        condition: service_healthy  # test only once the app is healthy
