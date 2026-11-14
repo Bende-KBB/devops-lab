@@ -32,6 +32,7 @@ flowchart TD
 | [phases/phase-2-public-url](phases/phase-2-public-url/README.md) | A public URL through a tunnel, and its risks |
 | [phases/phase-3-container](phases/phase-3-container/README.md) | Packaging and running the app with Docker |
 | [explanation/docker.md](explanation/docker.md) | How Docker works: images, containers, kernel, ports, signals, Compose |
+| [explanation/github-actions.md](explanation/github-actions.md) | How GitHub Actions works: workflows, jobs, steps, what they share |
 
 ### Technical
 
