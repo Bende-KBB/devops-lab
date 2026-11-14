@@ -20,6 +20,15 @@ Expected: `200 OK`, `Content-Type: text/plain; charset=utf-8`, body `Hello world
 
 Port mapping: host port `8080` → container port `3000`. Configuration: [compose.yaml](compose.yaml).
 
+## Test
+
+```bash
+docker compose run --rm smoke-test   # starts the app if needed, then runs the tests in tests/
+docker compose down
+```
+
+The same test runs in CI on every pull request.
+
 ## Public URL
 
 `docker compose up -d` also starts a Cloudflare quick tunnel (the `tunnel` service), which gives the app a temporary public HTTPS URL. Find it with:

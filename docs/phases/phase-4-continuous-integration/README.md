@@ -60,6 +60,6 @@ How workflows, jobs, and steps work: [GitHub Actions, explained](../../explanati
 | [1. Build the image on every PR](1-build-image-on-every-pr.md) | A broken `Dockerfile` can be merged unnoticed | Workflow runs `docker build` | Done |
 | [2. Always rebuild the app image](2-always-rebuild-the-app-image.md) | Forgetting `--build` silently runs an old image | `pull_policy: build` | Done |
 | [3. Add a health check](3-add-a-health-check.md) | Nobody knows whether the app is ready or alive | Compose `healthcheck`; CI `up --wait` | Done |
-| 4. Smoke-test the app on every PR | "It builds" doesn't mean "it works" | `node --test` in a Compose service | Planned |
+| [4. Smoke-test the app on every PR](4-smoke-test-app-on-every-pr.md) | "It builds" doesn't mean "it works" | `node --test` in a Compose service | Done |
 | 5. Publish the image to GHCR | The image exists only on the laptop | Merges to `main` push the image | Planned |
 | 6. Require the CI check before merging | `main` accepts failing PRs | Branch protection | Planned |
