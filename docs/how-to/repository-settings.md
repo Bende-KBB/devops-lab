@@ -62,6 +62,15 @@ Locally, `git config --global fetch.prune true` removes references to deleted br
 | Allow GitHub Actions to create and approve pull requests | Off | A workflow must never approve its own changes |
 | Artifact and log retention | 90 days (default) | Individual artifacts can set less (`retention-days`) |
 
+## Packages
+
+**Repository → Packages → `devops-lab` → Package settings**
+
+| Setting | Value | Why |
+|---|---|---|
+| Visibility | Public | The image contains no secrets; anything can pull it without credentials |
+| Connected repository | `devops-lab` | Links the package to its source and workflows |
+
 ## Verify
 
 ```bash

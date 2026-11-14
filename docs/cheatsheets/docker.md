@@ -32,6 +32,17 @@ docker image inspect --format '{{.Created}}' node:24-slim                 # when
 2. Write `node:<version>-slim@<digest>` in **both** places: the `FROM` line of the `Dockerfile`, and the `smoke-test` service's `image:` in `compose.yaml`.
 3. `docker compose up -d`, then `curl -i http://localhost:8080` and `docker compose exec app node -v`.
 
+## Published images
+
+Every merge to `main` publishes `ghcr.io/bende-kbb/devops-lab:sha-<commit SHA>`. The digest is on the Publish image run's Summary page.
+
+```bash
+docker pull ghcr.io/bende-kbb/devops-lab:sha-<commit SHA>
+docker run --rm --init -p 8081:3000 ghcr.io/bende-kbb/devops-lab:sha-<commit SHA>
+```
+
+`--init` gives a plain `docker run` the same instant stop as Compose's `init: true`.
+
 ## Docker Compose
 
 | Command | What it does |
