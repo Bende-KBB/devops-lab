@@ -17,6 +17,9 @@ jobs:
       - name: Build and start the app, wait until healthy
         run: docker compose up --wait app  # the app only, never the tunnel
 
+      - name: Run the smoke test
+        run: docker compose run --rm smoke-test
+
       - name: Show the app's logs if a step failed
         if: failure()
         run: docker compose logs app
