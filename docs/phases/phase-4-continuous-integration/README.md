@@ -1,6 +1,6 @@
 # Phase 4: Continuous Integration
 
-**Status:** in progress
+**Status:** done
 
 ## The problems this phase solves
 
@@ -64,4 +64,8 @@ How workflows, jobs, and steps work: [GitHub Actions, explained](../../explanati
 | [5. Protect `main`](5-protect-main.md) | `main` accepts failing or direct changes | Ruleset: PR + passing CI required | Done |
 | [6. Test every merge to `main`](6-test-every-merge-to-main.md) | Merged code on `main` is never tested itself | `publish.yml` calls `ci.yml` (reusable workflow) | Done |
 | [7. Keep the tested image as an artifact](7-keep-the-tested-image-as-an-artifact.md) | The tested image is thrown away with the VM | `docker save` + upload artifact, on `main` only | Done |
-| 8. Publish the tested image to GHCR | The image exists only on the laptop | Download the artifact, push to GHCR | Planned |
+| [8. Publish the tested image to GHCR](8-publish-the-tested-image-to-ghcr.md) | The image exists only on the laptop | Download the artifact, push to GHCR | Done |
+
+## Result
+
+What's fixed, what's open, ranked: [result.md](result.md).
