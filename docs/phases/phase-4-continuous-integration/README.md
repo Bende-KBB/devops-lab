@@ -56,7 +56,6 @@ flowchart LR
 |---|---|---|---|
 | [1. Build the image on every PR](1-build-image-on-every-pr.md) | A broken `Dockerfile` can be merged unnoticed | Workflow runs `docker build` | Done |
 | [2. Always rebuild the app image](2-always-rebuild-the-app-image.md) | Forgetting `--build` silently runs an old image | `pull_policy: build` | Done |
-| 3. Start the tunnel only on request | `docker compose up` could expose any machine to the internet | `public` profile | Planned |
-| 4. Smoke-test the app on every PR | "It builds" doesn't mean "it works" | Smoke-test script; CI starts the app via Compose | Planned |
-| 5. Publish the image to GHCR | The image exists only on the laptop | Merges to `main` push the image | Planned |
-| 6. Require the CI check before merging | `main` accepts failing PRs | Branch protection | Planned |
+| 3. Smoke-test the app on every PR | "It builds" doesn't mean "it works" | Smoke-test script; CI starts only the app via Compose | Planned |
+| 4. Publish the image to GHCR | The image exists only on the laptop | Merges to `main` push the image | Planned |
+| 5. Require the CI check before merging | `main` accepts failing PRs | Branch protection | Planned |
