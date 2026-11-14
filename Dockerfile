@@ -11,5 +11,10 @@ FROM node:24.22.3-slim@sha256:dc26ae92c9fb15cf6b1d63e20f0944b2efe0f115b20e00be48
 # Copy the server into the image.
 COPY server.js .
 
+# Run as the unprivileged "node" user (UID 1000) included in the official
+# image, not as root. The server only reads server.js and uses port 3000
+# (above 1024), so it needs no root rights.
+USER node
+
 # The command a container runs when it starts.
 CMD ["node", "server.js"]
