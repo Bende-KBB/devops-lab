@@ -56,3 +56,9 @@ jobs:
 
       - name: Push the image to GHCR
         run: docker push "$IMAGE"
+
+      # 4. Show what was published on the run's Summary page.
+      - name: Show the published image in the run summary
+        run: |
+          echo "Image: \`$IMAGE\`" >> "$GITHUB_STEP_SUMMARY"
+          docker buildx imagetools inspect "$IMAGE" | grep '^Digest:' >> "$GITHUB_STEP_SUMMARY"
