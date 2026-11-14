@@ -16,7 +16,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    P1["1 ✔<br/>Local server"] --> P2["2 ✔<br/>Public URL"] --> P3["3 ✔<br/>Container"] --> P4["4 ◐<br/>CI"] --> P5["5<br/>Kubernetes"] --> P6["6<br/>Helm"] --> P7["7<br/>CD"] --> P8["8<br/>24/7"]
+    P1["1 ✔<br/>Local server"] --> P2["2 ✔<br/>Public URL"] --> P3["3 ✔<br/>Container"] --> P4["4 ✔<br/>CI"] --> P5["5<br/>Kubernetes"] --> P6["6<br/>Helm"] --> P7["7<br/>CD"] --> P8["8<br/>24/7"]
 ```
 
 | Phase | Problem it solves | Tool | Status |
@@ -24,7 +24,7 @@ flowchart LR
 | [1](phases/phase-1-local-server/README.md) | There is no application | Node.js | ✔ Done |
 | [2](phases/phase-2-public-url/README.md) | Only reachable from this laptop | Cloudflare quick tunnel | ✔ Done |
 | [3](phases/phase-3-container/README.md) | Only runs where Node.js is installed; the server can reach the whole user account | Docker, Docker Compose | ✔ Done |
-| [4](phases/phase-4-continuous-integration/README.md) | Images built by hand; nothing checks a change | GitHub Actions, GHCR | ◐ In progress |
+| [4](phases/phase-4-continuous-integration/README.md) | Images built by hand; nothing checks a change | GitHub Actions, GHCR | ✔ Done |
 | 5 | A crashed app stays down | Kubernetes (k3d) | Planned |
 | 6 | Every new version means hand-editing deployment files | Helm | Planned |
 | 7 | Deploying is a manual command | Argo CD | Planned |
@@ -34,11 +34,18 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    SRC["server.js<br/>Dockerfile<br/>compose.yaml"] -->|"docker compose up -d<br/>(by hand, laptop only)"| NET
-    subgraph NET["Project network"]
-        TUN["tunnel<br/>container"] -->|"app:3000"| APP["app<br/>container"]
+    subgraph PR["Pull request"]
+        CI["CI: build, health check,<br/>smoke test"]
     end
-    TUN --> EDGE["Cloudflare"] --> V["Visitor"]
+    subgraph MAIN["Merge to main"]
+        T["Build, test<br/>the commit on main"] --> A["Artifact:<br/>the tested image"]
+        A --> G["GHCR<br/>sha-&lt;commit&gt;"]
+    end
+    PR -->|"✔ required"| MAIN
+    subgraph LAPTOP["Laptop (by hand)"]
+        NET["docker compose up -d<br/>app + tunnel"]
+    end
+    NET --> EDGE["Cloudflare"] --> V["Visitor"]
 ```
 
 ## Phase summaries
@@ -61,11 +68,16 @@ flowchart LR
 - **Cost:** a new root-level service (Docker Engine), a ~1 GB naive image, new concepts, weaker isolation than a virtual machine.
 - **New limitations:** built by hand and only on the laptop; base image updates are manual.
 
-### 4–8 (planned)
+### 4 · Continuous integration
+- **Problem:** images built by hand; broken changes could be merged; the image existed only on the laptop.
+- **Solution:** GitHub Actions builds and tests every pull request; `main` accepts only passing PRs; every merge is tested again, and its exact image published to GHCR.
+- **Cost:** workflow files to maintain; settings outside Git; manual updates of pinned actions.
+- **New limitations:** nothing runs the published image; a crashed app stays down.
+
+### 5–8 (planned)
 
 | Phase | Problem | Tool | Trade-off to expect |
 |---|---|---|---|
-| 4 | Images built by hand; broken changes can be merged | GitHub Actions, GHCR | Pipeline code to maintain; CI gets access to the registry |
 | 5 | A crashed app stays down | Kubernetes (k3d) | Many new concepts for one small app |
 | 6 | Hand-editing manifests for every version | Helm | A templating language on top of YAML |
 | 7 | Deploying is a manual command | Argo CD | Another system in the cluster; Git becomes the only way to change production |
