@@ -37,3 +37,12 @@ jobs:
 
       - name: Load the tested image into Docker
         run: docker load --input devops-lab-app.tar
+
+      # 2. Name it for the registry: ghcr.io/<owner>/<repo>:sha-<commit>.
+      - name: Set the image name
+        # ,, = lowercase: registry names must be lowercase.
+        # GITHUB_ENV makes IMAGE available to all later steps.
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}:sha-${GITHUB_SHA}" >> "$GITHUB_ENV"
+
+      - name: Tag the image for GHCR
+        run: docker tag devops-lab-app "$IMAGE"  # adds a name; the image itself is unchanged
