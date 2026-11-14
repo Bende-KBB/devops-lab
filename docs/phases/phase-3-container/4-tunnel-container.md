@@ -58,9 +58,46 @@ flowchart LR
 
 A tag is a movable label; the digest is a hash of the content. The tag was used once, to find the image; `compose.yaml` stores the digest.
 
+## Two services, two images, two containers
+
+Each service in `compose.yaml` gets its own image and its own container. The images come from different places:
+
+- **`app`:** **built** locally from the `Dockerfile` (`build: .`) → image `devops-lab-app` → container `devops-lab-app-1`
+- **`tunnel`:** **pulled** ready-made from Docker Hub, built by Cloudflare (`image: ...@sha256:...`) → image `cloudflare/cloudflared` → container `devops-lab-tunnel-1`
+
+```mermaid
+flowchart TB
+    F["compose.yaml"] --> S1["service: app<br/>build: ."]
+    F --> S2["service: tunnel<br/>image: cloudflare/cloudflared@sha256:..."]
+    S1 -->|"docker build"| I1["image: devops-lab-app"]
+    S2 -->|"docker pull"| I2["image: cloudflare/cloudflared"]
+    I1 -->|"run"| C1["container: devops-lab-app-1"]
+    I2 -->|"run"| C2["container: devops-lab-tunnel-1"]
+    C1 --- N["project network"]
+    C2 --- N
+```
+
+What `docker compose up` does, in order:
+
+- **Images first:** build `app`, pull `tunnel` (or reuse them if they already exist)
+- **Then the network:** one private network for the project
+- **Then the containers:** one per service, attached to the network
+
+Notes:
+
+- **The image is immutable; the tag is not.** `devops-lab-app:latest` is a label that every rebuild moves to the newest image. Only a digest always means the same content.
+- **`-1` in a container name** means "first container of this service." Compose names containers `<project>-<service>-<number>`.
+
+Check:
+
+```bash
+docker compose images                                                  # two images
+docker compose ps --format "table {{.Name}}\t{{.Service}}\t{{.Image}}"  # two containers
+```
+
 ## The analogy
 
-The courier who connects the event site to the city's delivery network used to sit **in the owner's house**, with a key to every room, holding a phone line open to the city. Now the courier arrives as **another truck on the site**: parked with the others, reaching the kitchen truck by name over the private service road, and holding the line to the city from there. The owner's house is no longer involved.
+The site plan lists two trucks. The **kitchen truck** is our own design: the organizer has it built in our workshop from our construction plan. The **courier truck**, who connects the site to the city's delivery network, is a standard model: bought ready-made from Cloudflare's dealer, by serial number. The courier used to sit **in the owner's house**, with a key to every room, holding a phone line open to the city. Now the courier arrives as **another truck on the site**: parked with the others, reaching the kitchen truck by name over the private service road, and holding the line to the city from there. The owner's house is no longer involved.
 
 | Kitchen | Docker |
 |---|---|

@@ -20,6 +20,7 @@ docker compose down              # stop and remove containers and network
 ```dockerfile
 FROM node:24.22.3-slim@sha256:dc26ae92c9fb15cf6b1d63e20f0944b2efe0f115b20e00be48fb23fceb061c54
 COPY server.js .
+USER node
 CMD ["node", "server.js"]
 ```
 
@@ -27,6 +28,7 @@ CMD ["node", "server.js"]
 |---|---|
 | `FROM node:24.22.3-slim@sha256:...` | Official Node.js image, slim variant (minimal Debian, no build tools). Pinned by digest: Docker uses the `sha256` and ignores the tag; the tag tells humans the exact version |
 | `COPY server.js .` | Copy `server.js` from the build context into the image's current folder (`/`, since none is set) |
+| `USER node` | Run everything after this line, including the command, as the unprivileged `node` user (UID 1000) instead of root |
 | `CMD ["node", "server.js"]` | The command a container runs when it starts |
 
 ### compose.yaml

@@ -16,14 +16,14 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    P1["1 ✔<br/>Local server"] --> P2["2 ✔<br/>Public URL"] --> P3["3 ◐<br/>Container"] --> P4["4<br/>CI"] --> P5["5<br/>Kubernetes"] --> P6["6<br/>Helm"] --> P7["7<br/>CD"] --> P8["8<br/>24/7"]
+    P1["1 ✔<br/>Local server"] --> P2["2 ✔<br/>Public URL"] --> P3["3 ✔<br/>Container"] --> P4["4<br/>CI"] --> P5["5<br/>Kubernetes"] --> P6["6<br/>Helm"] --> P7["7<br/>CD"] --> P8["8<br/>24/7"]
 ```
 
 | Phase | Problem it solves | Tool | Status |
 |---|---|---|---|
 | [1](phases/phase-1-local-server/README.md) | There is no application | Node.js | ✔ Done |
 | [2](phases/phase-2-public-url/README.md) | Only reachable from this laptop | Cloudflare quick tunnel | ✔ Done |
-| [3](phases/phase-3-container/README.md) | Only runs where Node.js is installed; the server can reach the whole user account | Docker, Docker Compose | ◐ In progress |
+| [3](phases/phase-3-container/README.md) | Only runs where Node.js is installed; the server can reach the whole user account | Docker, Docker Compose | ✔ Done |
 | 4 | Images built by hand; nothing checks a change | GitHub Actions, GHCR | Planned |
 | 5 | A crashed app stays down | Kubernetes (k3d) | Planned |
 | 6 | Every new version means hand-editing deployment files | Helm | Planned |
@@ -44,13 +44,22 @@ flowchart LR
 ## Phase summaries
 
 ### 1 · Local server
-**Problem:** a pipeline needs something to deliver. **Solution:** the smallest HTTP server, plain JavaScript, no dependencies. **Cost:** almost none. **New limitations:** reachable only from the laptop; mistakes crash the server at runtime.
+- **Problem:** a pipeline needs something to deliver.
+- **Solution:** the smallest HTTP server, plain JavaScript, no dependencies.
+- **Cost:** almost none.
+- **New limitations:** reachable only from the laptop; mistakes crash the server at runtime.
 
 ### 2 · Public URL (walking skeleton)
-**Problem:** nobody outside the laptop can reach the app. **Solution:** a Cloudflare quick tunnel; the laptop opens a connection *out*, visitors' requests come back through it. **Cost:** the server is exposed to the internet; Cloudflare decrypts the traffic; a vulnerability would run with the laptop user's full access. **New limitations:** random URL, two terminals, offline when the laptop sleeps.
+- **Problem:** nobody outside the laptop can reach the app.
+- **Solution:** a Cloudflare quick tunnel; the laptop opens a connection *out*, visitors' requests come back through it.
+- **Cost:** the server is exposed to the internet; Cloudflare decrypts the traffic; a vulnerability would run with the laptop user's full access.
+- **New limitations:** random URL, two terminals, offline when the laptop sleeps.
 
-### 3 · Container (in progress)
-**Problem:** the app only runs where Node.js is installed, and runs with the user's full permissions. **Solution:** package app + runtime into an image; run it as an isolated container, configured in `compose.yaml`. **Cost:** a new root-level service (Docker Engine), a ~1 GB naive image, new concepts, weaker isolation than a virtual machine.
+### 3 · Container
+- **Problem:** the app only runs where Node.js is installed, and runs with the user's full permissions.
+- **Solution:** package app + runtime into an image; run it as an isolated container, configured in `compose.yaml`.
+- **Cost:** a new root-level service (Docker Engine), a ~1 GB naive image, new concepts, weaker isolation than a virtual machine.
+- **New limitations:** built by hand and only on the laptop; base image updates are manual.
 
 ### 4–8 (planned)
 
