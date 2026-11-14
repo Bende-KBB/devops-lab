@@ -54,7 +54,7 @@ flowchart LR
 
 | Step | Problem | Change | Status |
 |---|---|---|---|
-| 1. Build the image on every PR | A broken `Dockerfile` can be merged unnoticed | Workflow runs `docker build` | In progress |
+| [1. Build the image on every PR](1-build-image-on-every-pr.md) | A broken `Dockerfile` can be merged unnoticed | Workflow runs `docker build` | Done |
 | 2. Smoke-test the image on every PR | "It builds" doesn't mean "it works" | Start the container, check the response | Planned |
 | 3. Publish the image to GHCR | The image exists only on the laptop | Merges to `main` push the image | Planned |
 | 4. Require the CI check before merging | `main` accepts failing PRs | Branch protection | Planned |
