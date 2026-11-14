@@ -63,5 +63,5 @@ How workflows, jobs, and steps work: [GitHub Actions, explained](../../explanati
 | [4. Smoke-test the app on every PR](4-smoke-test-app-on-every-pr.md) | "It builds" doesn't mean "it works" | `node --test` in a Compose service | Done |
 | [5. Protect `main`](5-protect-main.md) | `main` accepts failing or direct changes | Ruleset: PR + passing CI required | Done |
 | [6. Test every merge to `main`](6-test-every-merge-to-main.md) | Merged code on `main` is never tested itself | `publish.yml` calls `ci.yml` (reusable workflow) | Done |
-| 7. Keep the tested image as an artifact | The tested image is thrown away with the VM | `docker save` + upload artifact | Planned |
+| [7. Keep the tested image as an artifact](7-keep-the-tested-image-as-an-artifact.md) | The tested image is thrown away with the VM | `docker save` + upload artifact, on `main` only | Done |
 | 8. Publish the tested image to GHCR | The image exists only on the laptop | Download the artifact, push to GHCR | Planned |
