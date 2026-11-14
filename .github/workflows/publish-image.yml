@@ -1,0 +1,14 @@
+name: Publish image
+
+on:
+  push:
+    branches: [main]  # every merge to main
+
+permissions:
+  contents: read      # the automatic token can only read the repository
+
+jobs:
+  build-and-test-main:
+    uses: ./.github/workflows/ci.yml  # same build and test as on pull requests
+    with:
+      save-image: true  # keep the tested image as an artifact of this run

@@ -3,6 +3,11 @@ name: CI
 on:
   pull_request:   # every pull request: opened or updated
   workflow_call:  # other workflows can call this one
+    inputs:
+      save-image:
+        description: Save the tested image as an artifact of this run
+        type: boolean
+        default: false
 
 permissions:
   contents: read  # the automatic token can only read the repository
@@ -20,6 +25,19 @@ jobs:
 
       - name: Run the smoke test
         run: docker compose run --rm smoke-test
+
+      - name: Save the tested image to a file
+        if: inputs.save-image
+        run: docker save --output devops-lab-app.tar devops-lab-app
+      
+      - name: Upload the tested image as an artifact
+        if: inputs.save-image
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9  # v7.0.2
+        with:
+          name: devops-lab-app-image
+          path: devops-lab-app.tar
+          retention-days: 1         # only needed during this run
+          if-no-files-found: error  # a missing file fails the step
 
       - name: Show the app's logs if a step failed
         if: failure()
