@@ -46,3 +46,13 @@ jobs:
 
       - name: Tag the image for GHCR
         run: docker tag devops-lab-app "$IMAGE"  # adds a name; the image itself is unchanged
+
+      # 3. Publish it.
+      - name: Log in to GHCR
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # this job's token, expires when the job ends
+        # The token goes through stdin: never in the script text or the command line.
+        run: echo "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+
+      - name: Push the image to GHCR
+        run: docker push "$IMAGE"
