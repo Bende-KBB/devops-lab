@@ -5,7 +5,7 @@ Commands, this project's files line by line, and common errors. Concepts: [expla
 ## This project
 
 ```bash
-docker compose up -d --build     # build the image and start in the background
+docker compose up -d             # build (always, from source) and start in the background
 docker compose ps                # list this project's containers
 docker compose logs app          # what the app printed
 docker compose logs tunnel       # includes the public https://...trycloudflare.com URL
@@ -37,6 +37,7 @@ CMD ["node", "server.js"]
 services:
   app:
     build: .
+    pull_policy: build
     init: true
     ports:
       - "8080:3000"
@@ -53,6 +54,7 @@ services:
 | `services:` | The containers this project runs |
 | `app:` | Service name; also its address on the project network |
 | `build: .` | Build from `./Dockerfile`; the image is named `devops-lab-app` |
+| `pull_policy: build` | Always build from source on `up`, even if the image exists. Without it, `up` reuses an existing image and changed code is silently ignored |
 | `init: true` | Run `docker-init` as process 1, which forwards stop signals; stops take ~1 s instead of 10 |
 | `"8080:3000"` | Host port 8080 → container port 3000 (quoted: YAML-safe) |
 | `tunnel:` | Second service: Cloudflare's `cloudflared` image |
@@ -74,14 +76,14 @@ docker image inspect --format '{{.Created}}' node:24-slim                 # when
 
 1. **New Node.js version?** Wait 14 days after its release, unless it's a **security release** (check the Node.js release notes): then adopt directly and document it. **Same version, new build** (operating system patches only)? Adopt directly.
 2. Write `node:<version>-slim@<digest>` in the `FROM` line.
-3. `docker compose up -d --build`, then `curl -i http://localhost:8080` and `docker compose exec app node -v`.
+3. `docker compose up -d`, then `curl -i http://localhost:8080` and `docker compose exec app node -v`.
 
 ## Docker Compose
 
 | Command | What it does |
 |---|---|
 | `docker compose up -d` | Create and start all services in the background (`-d` = detached) |
-| `docker compose up -d --build` | Same, rebuilding images first |
+| `docker compose up -d --build` | Force a rebuild. Not needed in this project: `pull_policy: build` always rebuilds |
 | `docker compose ps` | List this project's containers |
 | `docker compose logs <service>` | Show a service's output (`-f` to follow) |
 | `docker compose exec <service> <command>` | Run a command inside a running service |

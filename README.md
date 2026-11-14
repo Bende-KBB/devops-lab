@@ -11,7 +11,7 @@ Learning DevOps end-to-end: from a hello world app to a deployed service, one de
 Requires a Docker Engine with the Compose plugin. Node.js is not needed on the host.
 
 ```bash
-docker compose up -d --build     # build the image and start the app in the background
+docker compose up -d             # build the image (always, from source) and start the app in the background
 curl -i http://localhost:8080    # test
 docker compose down              # stop and remove
 ```

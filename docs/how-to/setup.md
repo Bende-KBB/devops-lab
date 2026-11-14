@@ -192,7 +192,7 @@ nvm install 24.22.1
 
 ```bash
 cd ~/devops-lab
-docker compose up -d --build
+docker compose up -d
 curl -i http://localhost:8080      # 200 Hello world
 docker compose down
 ```
