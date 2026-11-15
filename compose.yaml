@@ -2,7 +2,6 @@ services:
   app:
     build: .
     pull_policy: build  # rebuild on every "up": the running app always matches the code
-    init: true          # init process as PID 1 forwards stop signals: stops take ~1s, not 10
     ports:
       - "8080:3000"     # host:container
     healthcheck:

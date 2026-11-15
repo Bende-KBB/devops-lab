@@ -211,7 +211,10 @@ sequenceDiagram
     Note over P: killed immediately,<br/>open requests cut off
 ```
 
-Fixes: run a tiny init process as PID 1 that forwards signals (`docker run --init`, which uses `docker-init`), or handle `SIGTERM` in the application and shut down cleanly. This matters for Kubernetes, which stops containers this way on every update.
+Fixes:
+
+- **The application handles the signal itself** (graceful shutdown): it stops accepting connections, finishes open requests, and exits. Works everywhere. **This project does this** (`server.js`).
+- **An init process as PID 1** (`docker run --init`, Compose `init: true`) that forwards signals. Only works where someone sets it; Kubernetes has no such option.
 
 ---
 

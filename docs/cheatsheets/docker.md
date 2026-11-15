@@ -38,10 +38,10 @@ Every merge to `main` publishes `ghcr.io/bende-kbb/devops-lab:sha-<commit SHA>`.
 
 ```bash
 docker pull ghcr.io/bende-kbb/devops-lab:sha-<commit SHA>
-docker run --rm --init -p 8081:3000 ghcr.io/bende-kbb/devops-lab:sha-<commit SHA>
+docker run --rm -p 8081:3000 ghcr.io/bende-kbb/devops-lab:sha-<commit SHA>
 ```
 
-`--init` gives a plain `docker run` the same instant stop as Compose's `init: true`.
+Images published before graceful shutdown need `--init` to stop quickly
 
 ## Docker Compose
 
@@ -103,7 +103,7 @@ docker run --rm --init -p 8081:3000 ghcr.io/bende-kbb/devops-lab:sha-<commit SHA
 | `docker: 'compose' is not a docker command` | Compose plugin missing | `sudo apt install -y docker-compose-v2` |
 | `curl: (7) ... Connection refused` | Wrong port, or not published | Use `localhost:8080`; check `ports:` in `compose.yaml` |
 | `port is already allocated` | Something else uses host port 8080 | `docker ps`; stop it, or change the host side of the mapping |
-| Stop takes 10 s | No init process | `init: true` in `compose.yaml` |
+| Stop takes 10 s | The app isn't handling `SIGTERM` | Check the shutdown handler in `server.js`; `docker compose logs app` should show `Received SIGTERM` |
 | `exec: "ps": executable file not found` | The slim image has no such tool | Expected; inspect from the host (`docker compose ps`, `docker compose logs`) |
 | Tunnel URL gives 502 Bad Gateway | Tunnel can't reach the app | Check `http://app:3000` (service name, **container** port) and that `app` is Up |
 | `container ... is unhealthy` | The health check keeps failing | `docker compose logs app`; `docker inspect --format '{{json .State.Health}}' devops-lab-app-1` shows the last check results |
