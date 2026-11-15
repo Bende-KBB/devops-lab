@@ -7,3 +7,25 @@ const server = http.createServer((request, response) => {
 
 server.listen(3000);
 console.log("Server listening on port 3000");
+
+// Graceful shutdown: on a stop signal, stop accepting new connections,
+// let open requests finish, then exit. Platforms (Docker, Kubernetes)
+// send SIGTERM; Ctrl+C in a terminal sends SIGINT.
+const SHUTDOWN_TIMEOUT_MS = 5000; // exit anyway if requests don't finish in time
+
+function shutDown(signal) {
+  console.log(`Received ${signal}, shutting down`);
+
+  server.close(() => {
+    console.log("All connections closed, exiting");
+    process.exit(0);
+  });
+
+  setTimeout(() => {
+    console.error("Shutdown timed out, exiting");
+    process.exit(1);
+  }, SHUTDOWN_TIMEOUT_MS).unref();
+}
+
+process.on("SIGTERM", shutDown);
+process.on("SIGINT", shutDown);
