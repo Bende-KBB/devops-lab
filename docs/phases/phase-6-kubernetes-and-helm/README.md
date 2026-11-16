@@ -27,5 +27,5 @@ From the [Phase 5 result](../phase-5-production/result.md), ranked:
 | Step | Problem | Change | Status |
 |---|---|---|---|
 | [1. Measure deploy downtime and crash recovery](1-measure-deploy-downtime-and-crash-recovery.md) | The problems are assumed, not measured | Baseline measurement | Done |
-| 2. Model a realistic startup time | The app doesn't start like a real service | Declared, simulated 5-second startup | Planned |
+| [2. Model a realistic startup time](2-model-a-realistic-startup-time.md) | The app doesn't start like a real service | Declared, simulated 5-second startup | Done |
 | 3+. The app in a cluster | Deploy downtime; crashes stay down | Cluster, Helm chart, rolling updates, readiness probes | Planned |
