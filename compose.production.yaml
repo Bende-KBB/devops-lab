@@ -5,7 +5,7 @@ services:
   app:
     build: !reset null    # never build in production
     # tag = the commit, for humans; digest = the content, what Docker uses
-    image: ghcr.io/bende-kbb/devops-lab:sha-2795306509ee444d6bf3ab7ad98b3f16f30660c5@sha256:d088a22b93eee292885c632381c50c8a678f32fb8c0a54f55c2b91c9a087b45f
+    image: ghcr.io/bende-kbb/devops-lab:sha-b06b5ba915e3c8c978a01fb7b34aa42943d916ad@sha256:7250deddecd89c3fb744cf078b1e36fb31b5ed4b0276ed176f0ee9afe18c26c0
     pull_policy: missing  # pull only if not present: a digest's content never changes
 
   tunnel:
