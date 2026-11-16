@@ -121,6 +121,7 @@ flowchart LR
 - **Closing the lot for the night** keeps every truck inside: stopping the cluster.
 - **Demolishing the lot** removes it and every truck on it; the plan remains: deleting the cluster.
 - **The office's key** opens everything: the kubeconfig, never handed out.
+- **The phone to the office:** asking "which spaces exist?", ordering "park two soup trucks" (`kubectl`). The office only takes orders from someone showing the owner's ID card (the kubeconfig).
 
 ### Planned
 

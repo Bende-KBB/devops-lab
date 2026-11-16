@@ -234,6 +234,20 @@ Only needed to serve the app on `devops-pipe.live`.
    rm k3d-linux-amd64 checksums.txt
    ```
 
+## 13. kubectl
+
+Install the cluster's exact Kubernetes version (see the `image:` line in `infra/local-cluster.yaml`).
+
+```bash
+cd /tmp
+curl -fLO https://dl.k8s.io/release/v1.35.5/bin/linux/amd64/kubectl
+curl -fLO https://dl.k8s.io/release/v1.35.5/bin/linux/amd64/kubectl.sha256
+echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check   # kubectl: OK
+sudo install -m 0755 kubectl /usr/local/bin/kubectl
+rm kubectl kubectl.sha256
+kubectl version --client
+```
+
 ## Final check
 
 ```bash
