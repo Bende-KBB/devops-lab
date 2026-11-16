@@ -2,6 +2,12 @@
 # Run every command with both files:
 #   docker compose -f compose.yaml -f compose.production.yaml <command>
 services:
+  app:
+    build: !reset null    # never build in production
+    # tag = the commit, for humans; digest = the content, what Docker uses
+    image: ghcr.io/bende-kbb/devops-lab:sha-2795306509ee444d6bf3ab7ad98b3f16f30660c5@sha256:d088a22b93eee292885c632381c50c8a678f32fb8c0a54f55c2b91c9a087b45f
+    pull_policy: missing  # pull only if not present: a digest's content never changes
+
   tunnel:
     image: cloudflare/cloudflared@sha256:a15a3b50b8dabd57ac2090e9484c0247dba9dfa1f0df4d298d4317f9d69eb2d5  # 2026.10.1
     command: ["tunnel", "run"]  # named tunnel: routes are set in the Cloudflare dashboard
