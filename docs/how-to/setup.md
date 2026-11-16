@@ -188,6 +188,24 @@ nvm install 24.22.1
 
 ---
 
+## 11. Tunnel token (for the public domain)
+
+Only needed to serve the app on `devops-pipe.live`.
+
+1. In the Cloudflare dashboard, open the tunnel `devops-pipe` (Zero Trust → Networks → Tunnels) and copy the token from the connector install command (the string after `--token`).
+2. Create `tunnel.env` in the repository folder with an editor (not `echo`, which would put the token in the shell history):
+
+   ```
+   TUNNEL_TOKEN=<token>
+   ```
+
+3. Protect it and confirm Git ignores it:
+
+   ```bash
+   chmod 600 tunnel.env
+   git check-ignore -v tunnel.env   # .gitignore:2:tunnel.env  tunnel.env
+   ```
+
 ## Final check
 
 ```bash

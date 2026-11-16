@@ -44,7 +44,7 @@ flowchart LR
     subgraph LAPTOP["Laptop (by hand)"]
         NET["docker compose up -d<br/>app + tunnel"]
     end
-    NET --> EDGE["Cloudflare"] --> V["Visitor"]
+    NET -->|"named tunnel"| EDGE["Cloudflare<br/>devops-pipe.live"] --> V["Visitor"]
 ```
 
 ## Phase summaries

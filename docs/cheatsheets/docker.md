@@ -8,7 +8,7 @@ Commands, this project's files line by line, and common errors. Concepts: [expla
 docker compose up -d             # build (always, from source) and start in the background
 docker compose ps                # list this project's containers
 docker compose logs app          # what the app printed
-docker compose logs tunnel       # includes the public https://...trycloudflare.com URL
+docker compose logs tunnel       # "Registered tunnel connection" = online at devops-pipe.live
 curl -i http://localhost:8080    # test
 docker compose down              # stop and remove containers and network
 ```
@@ -108,3 +108,5 @@ Images published before graceful shutdown need `--init` to stop quickly
 | Tunnel URL gives 502 Bad Gateway | Tunnel can't reach the app | Check `http://app:3000` (service name, **container** port) and that `app` is Up |
 | `container ... is unhealthy` | The health check keeps failing | `docker compose logs app`; `docker inspect --format '{{json .State.Health}}' devops-lab-app-1` shows the last check results |
 | `dependency failed to start: container ... is unhealthy` | The app's health check failed, so the test never started | `docker compose logs app` |
+| Cloudflare error 1033 on `devops-pipe.live` | The tunnel isn't connected | `docker compose up -d`; `docker compose logs tunnel`; check `tunnel.env` exists |
+| `502 Bad Gateway` on `devops-pipe.live` | The tunnel is up, but can't reach `app:3000` | `docker compose ps`: is `app` running and healthy? |
