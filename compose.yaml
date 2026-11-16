@@ -12,15 +12,6 @@ services:
       retries: 3        # unhealthy after 3 failures in a row
       start_period: 5s  # failures in the first 5s don't count
 
-  tunnel:
-    image: cloudflare/cloudflared@sha256:a15a3b50b8dabd57ac2090e9484c0247dba9dfa1f0df4d298d4317f9d69eb2d5  # 2026.10.1
-    command: ["tunnel", "run"]  # named tunnel: routes are set in the Cloudflare dashboard
-    env_file:
-      - path: tunnel.env    # TUNNEL_TOKEN=...: secret, ignored by Git
-        required: false     # CI and fresh clones have no token
-    depends_on:
-      - app
-
   smoke-test:
     image: node:24.22.3-slim@sha256:dc26ae92c9fb15cf6b1d63e20f0944b2efe0f115b20e00be48fb23fceb061c54  # 24.22.3
     profiles: ["test"]  # not started by "up"; run with: docker compose run --rm smoke-test
