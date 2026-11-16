@@ -1,0 +1,21 @@
+# Local Kubernetes cluster for this project, built by k3d inside Docker.
+#   Create:  k3d cluster create --config infra/local-cluster.yaml
+#   Stop:    k3d cluster stop devops-lab     (keeps everything inside)
+#   Start:   k3d cluster start devops-lab
+#   Delete:  k3d cluster delete devops-lab   (removes everything inside)
+apiVersion: k3d.io/v1alpha5  # format of this file (k3d's config format)
+kind: Simple
+metadata:
+  name: devops-lab  # node containers are named k3d-devops-lab-*
+
+servers: 1  # nodes running the control plane (and workloads)
+agents: 0   # nodes running workloads only
+
+image: rancher/k3s:v1.35.5-k3s1@sha256:2074403abe1bded11ef3dde09d457e13be8e0b64c218b1c4f8269b4565cfbc65  # 1.35.5
+
+options:
+  k3s:
+    extraArgs:
+      - arg: --disable=traefik  # bundled ingress controller: nothing uses it
+        nodeFilters:
+          - server:*  # on every server node
