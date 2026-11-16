@@ -29,17 +29,19 @@ docker compose down
 
 The same test runs in CI on every pull request.
 
-## Public URL
+## Production
 
-**https://devops-pipe.live**: served through a Cloudflare named tunnel, while the containers run.
-
-The tunnel needs a token in `tunnel.env` (one line: `TUNNEL_TOKEN=<token>`; never committed). Without it, the app still runs locally; only the tunnel fails. Setup and settings: [Cloudflare settings](docs/how-to/cloudflare-settings.md).
+**https://devops-pipe.live**: the image CI tested and published, by digest, served through a Cloudflare named tunnel while the containers run.
 
 ```bash
-docker compose up -d --wait     # app + tunnel
+docker compose -f compose.yaml -f compose.production.yaml up -d --wait
 curl -i https://devops-pipe.live
-docker compose down
+docker compose -f compose.yaml -f compose.production.yaml down
 ```
+
+- **Needs** `tunnel.env` (one line: `TUNNEL_TOKEN=<token>`; never committed): [Cloudflare settings](docs/how-to/cloudflare-settings.md).
+- **Use both files on every production command,** including `down`.
+- **New version:** change the digest in `compose.production.yaml` through a PR, then `git pull` and the command above.
 
 ## Current limitations
 
@@ -47,5 +49,6 @@ docker compose down
 - Base image updates are manual: security patches arrive only when the pinned digest is updated.
 - Offline when the laptop sleeps or a container crashes, and nobody notices.
 - Production runs on the laptop: the domain serves the app only while the containers run.
-- Production runs a local build, not the image CI tested.
+- Deploying means typing commands on the production machine.
+- Every deploy causes a short downtime.
 - Mistakes such as a typo are only discovered when a request arrives.
