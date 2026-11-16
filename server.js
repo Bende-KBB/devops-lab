@@ -5,8 +5,19 @@ const server = http.createServer((request, response) => {
     response.end("Hello world\n");
 });
 
-server.listen(3000);
-console.log("Server listening on port 3000");
+
+// Simulated initialization: real services take seconds to start
+// (loading configuration, connecting to databases, warming caches).
+// This app models one; the delay is deliberate, not real work.
+const STARTUP_DELAY_MS = 5000;
+
+console.log(`Initializing (simulated, ${STARTUP_DELAY_MS / 1000} s)...`);
+setTimeout(() => {
+  server.listen(3000);
+  console.log("Listening on port 3000");
+}, STARTUP_DELAY_MS);
+
+
 
 // Graceful shutdown: on a stop signal, stop accepting new connections,
 // let open requests finish, then exit. Platforms (Docker, Kubernetes)
