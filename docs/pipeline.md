@@ -16,7 +16,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    P1["1 ✔<br/>Local server"] --> P2["2 ✔<br/>Public URL"] --> P3["3 ✔<br/>Container"] --> P4["4 ✔<br/>CI"] --> P5["5 ◐<br/>Production"] --> P6["6<br/>Kubernetes + Helm"] --> P7["7<br/>CD"]
+    P1["1 ✔<br/>Local server"] --> P2["2 ✔<br/>Public URL"] --> P3["3 ✔<br/>Container"] --> P4["4 ✔<br/>CI"] --> P5["5 ✔<br/>Production"] --> P6["6<br/>Kubernetes + Helm"] --> P7["7<br/>CD"]
 ```
 
 | Phase | Problem it solves | Tool | Status |
@@ -25,7 +25,7 @@ flowchart LR
 | [2](phases/phase-2-public-url/README.md) | Only reachable from this laptop | Cloudflare quick tunnel | ✔ Done |
 | [3](phases/phase-3-container/README.md) | Only runs where Node.js is installed; the server can reach the whole user account | Docker, Docker Compose | ✔ Done |
 | [4](phases/phase-4-continuous-integration/README.md) | Images built by hand; nothing checks a change | GitHub Actions, GHCR | ✔ Done |
-| [5](phases/phase-5-production/README.md) | Random public address; production runs a local build | Named tunnel, Compose | ◐ In progress |
+| [5](phases/phase-5-production/README.md) | Random public address; production runs a local build | Named tunnel, Compose | ✔ Done |
 | 6 | Downtime on every deploy; a crashed app stays down | Kubernetes (k3d), Helm | Planned |
 | 7 | Deploying means typing commands on the production machine | Argo CD | Planned |
 
@@ -74,11 +74,8 @@ flowchart LR
 - **Cost:** workflow files to maintain; settings outside Git; manual updates of pinned actions.
 - **New limitations:** nothing runs the published image; a crashed app stays down.
 
-### 5–8 (planned)
-
-| Phase | Problem | Tool | Trade-off to expect |
-|---|---|---|---|
-| 5 | A crashed app stays down | Kubernetes (k3d) | Many new concepts for one small app |
-| 6 | Hand-editing manifests for every version | Helm | A templating language on top of YAML |
-| 7 | Deploying is a manual command | Argo CD | Another system in the cluster; Git becomes the only way to change production |
-| 8 | Offline when the laptop sleeps | Cloud cluster | Free-tier limits; real secrets appear |
+### 5 · Production on the domain
+- **Problem:** the public address was random; production ran a local build; the app only stopped correctly with an `init` process.
+- **Solution:** graceful shutdown in the app; a named tunnel to `devops-pipe.live`; production runs the CI-tested image by digest, configured in `compose.production.yaml`.
+- **Cost:** the first secret (the tunnel token) to protect; routing in the Cloudflare dashboard; a long production command.
+- **New limitations:** every deploy causes downtime; a crashed app stays down; deploying means typing commands on the production machine.
