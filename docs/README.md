@@ -41,4 +41,5 @@ flowchart TD
 |---|---|
 | [how-to/setup.md](how-to/setup.md) | Setting up the development machine (WSL, Git, SSH, Docker, cloudflared) |
 | [how-to/repository-settings.md](how-to/repository-settings.md) | GitHub settings: the `main` ruleset, pull request and security settings |
+| [how-to/cloudflare-settings.md](how-to/cloudflare-settings.md) | Domain and Cloudflare settings: name.com, DNS, the tunnel, the token |
 | [cheatsheets/docker.md](cheatsheets/docker.md) | Docker and Compose commands, this project's files line by line, common errors |

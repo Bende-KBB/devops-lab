@@ -31,18 +31,21 @@ The same test runs in CI on every pull request.
 
 ## Public URL
 
-`docker compose up -d` also starts a Cloudflare quick tunnel (the `tunnel` service), which gives the app a temporary public HTTPS URL. Find it with:
+**https://devops-pipe.live**: served through a Cloudflare named tunnel, while the containers run.
+
+The tunnel needs a token in `tunnel.env` (one line: `TUNNEL_TOKEN=<token>`; never committed). Without it, the app still runs locally; only the tunnel fails. Setup and settings: [Cloudflare settings](docs/how-to/cloudflare-settings.md).
 
 ```bash
-docker compose logs tunnel       # look for https://<random>.trycloudflare.com
+docker compose up -d --wait     # app + tunnel
+curl -i https://devops-pipe.live
+docker compose down
 ```
-
-The URL changes on every start. How the tunnel works and its risks: [phase 2](docs/phases/phase-2-public-url/README.md), [step 4 of phase 3](docs/phases/phase-3-container/4-tunnel-container.md). Only this hello world server may be exposed this way.
 
 ## Current limitations
 
 - The image is built by hand and exists only on this machine.
 - Base image updates are manual: security patches arrive only when the pinned digest is updated.
 - Offline when the laptop sleeps or a container crashes, and nobody notices.
-- The public URL is random, changes on every start, and must be looked up in the logs.
+- Production runs on the laptop: the domain serves the app only while the containers run.
+- Production runs a local build, not the image CI tested.
 - Mistakes such as a typo are only discovered when a request arrives.

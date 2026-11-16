@@ -93,26 +93,30 @@ flowchart LR
 
 ---
 
-## Phase 5: Kubernetes *(planned)*
+## Phase 5: Production on the domain
+
+```mermaid
+flowchart LR
+    C["Customer in the city"] -->|"calls the fixed number,<br/>listed in the directory<br/>(devops-pipe.live)"| CO["Courier company<br/>(Cloudflare)"]
+    CO -->|"line opened by the courier,<br/>who shows his badge<br/>(named tunnel, token)"| T["Truck serving soup<br/>(app container)"]
+```
+
+- **The number never changes:** it's in the city's directory (DNS).
+- **The badge:** whoever holds it can take the calls, so it stays locked away (`tunnel.env`, outside Git).
+
+---
+
+## Phase 6: Kubernetes and Helm *(planned)*
 
 ```mermaid
 flowchart LR
     ORD["Order: 'always keep 2 soup<br/>trucks serving'<br/>(desired state)"] --> FM["Fleet manager<br/>(Kubernetes)"]
     FM --> LOT["Managed parking lot, its spaces<br/>(cluster, nodes)"]
     FM -->|"a truck breaks down"| NEW["Replaces it<br/>(self-healing)"]
+    FORM["Fill-in-the-blanks event plan<br/>+ one values sheet<br/>(Helm chart, values.yaml)"] --> ORD
 ```
 
-- **Shift change, one truck at a time,** and the cook must hear "closing time" to finish the open orders: rolling update, graceful shutdown.
-
----
-
-## Phase 6: Helm *(planned)*
-
-```mermaid
-flowchart LR
-    FORM["Fill-in-the-blanks event plan<br/>(chart)"] --> PLAN["Complete event plan<br/>(manifests)"]
-    VAL["One values sheet:<br/>'trucks: 2, spot: 8080'<br/>(values.yaml)"] --> PLAN
-```
+- **Shift change, one truck at a time,** so a soup truck is always serving: rolling update.
 
 ---
 
@@ -123,13 +127,4 @@ flowchart LR
     BOOK["Official event plan<br/>in the recipe book<br/>(Git)"] --> DIS["Dispatcher compares<br/>book and street<br/>(Argo CD)"]
     STREET["Trucks on the street<br/>(cluster)"] --> DIS
     DIS -->|"fixes every difference"| STREET
-```
-
----
-
-## Phase 8: 24/7 *(planned)*
-
-```mermaid
-flowchart LR
-    LOT["Permanent lot,<br/>open day and night<br/>(cloud cluster)"] --- NUM["Fixed phone number<br/>(own domain)"]
 ```
