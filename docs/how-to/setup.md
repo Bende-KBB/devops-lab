@@ -206,6 +206,34 @@ Only needed to serve the app on `devops-pipe.live`.
    git check-ignore -v tunnel.env   # .gitignore:2:tunnel.env  tunnel.env
    ```
 
+## 12. k3d (local Kubernetes clusters)
+
+1. On `https://github.com/k3d-io/k3d/releases`, pick a release at least 14 days old (unless it's a security release).
+2. Download the program and the checksum file:
+
+   ```bash
+   cd /tmp
+   curl -fLO https://github.com/k3d-io/k3d/releases/download/<version>/k3d-linux-amd64
+   curl -fLO https://github.com/k3d-io/k3d/releases/download/<version>/checksums.txt
+   ```
+
+3. Verify: compare the hash with its line in `checksums.txt`:
+
+   ```bash
+   sha256sum k3d-linux-amd64
+   cat checksums.txt
+   ```
+
+   (`sha256sum --check` may report "no file was verified" when the file names in `checksums.txt` differ; then compare by eye.)
+
+4. Install, check, and clean up:
+
+   ```bash
+   sudo install -m 0755 k3d-linux-amd64 /usr/local/bin/k3d
+   k3d version
+   rm k3d-linux-amd64 checksums.txt
+   ```
+
 ## Final check
 
 ```bash
