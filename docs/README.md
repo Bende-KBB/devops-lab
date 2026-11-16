@@ -33,6 +33,7 @@ flowchart TD
 | [phases/phase-3-container](phases/phase-3-container/README.md) | Packaging and running the app with Docker |
 | [explanation/docker.md](explanation/docker.md) | How Docker works: images, containers, kernel, ports, signals, Compose |
 | [explanation/github-actions.md](explanation/github-actions.md) | How GitHub Actions works: workflows, jobs, steps, what they share |
+| [explanation/kubernetes.md](explanation/kubernetes.md) | How Kubernetes works, one concept at a time |
 | [explanation/analogy.md](explanation/analogy.md) | One analogy for the whole project, with a diagram per phase |
 
 ### Technical
@@ -43,3 +44,4 @@ flowchart TD
 | [how-to/repository-settings.md](how-to/repository-settings.md) | GitHub settings: the `main` ruleset, pull request and security settings |
 | [how-to/cloudflare-settings.md](how-to/cloudflare-settings.md) | Domain and Cloudflare settings: name.com, DNS, the tunnel, the token |
 | [cheatsheets/docker.md](cheatsheets/docker.md) | Docker and Compose commands, this project's files line by line, common errors |
+| [cheatsheets/kubernetes.md](cheatsheets/kubernetes.md) | Kubernetes and k3d commands |

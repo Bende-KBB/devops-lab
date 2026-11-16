@@ -107,17 +107,26 @@ flowchart LR
 
 ---
 
-## Phase 6: Kubernetes and Helm *(planned)*
+## Phase 6: Kubernetes and Helm
+
+### The lot
 
 ```mermaid
 flowchart LR
-    ORD["Order: 'always keep 2 soup<br/>trucks serving'<br/>(desired state)"] --> FM["Fleet manager<br/>(Kubernetes)"]
-    FM --> LOT["Managed parking lot, its spaces<br/>(cluster, nodes)"]
-    FM -->|"a truck breaks down"| NEW["Replaces it<br/>(self-healing)"]
-    FORM["Fill-in-the-blanks event plan<br/>+ one values sheet<br/>(Helm chart, values.yaml)"] --> ORD
+    PLAN["Plan of the lot:<br/>size, equipment<br/>(infra/local-cluster.yaml)"] -->|"built"| LOT["Managed parking lot,<br/>staff in the office, no trucks yet<br/>(cluster)"]
+    LOT --- SP["Parking spaces<br/>(nodes)"]
+    LOT --- OFF["Office: records, managers,<br/>dispatcher<br/>(control plane)"]
 ```
 
-- **Shift change, one truck at a time,** so a soup truck is always serving: rolling update.
+- **Closing the lot for the night** keeps every truck inside: stopping the cluster.
+- **Demolishing the lot** removes it and every truck on it; the plan remains: deleting the cluster.
+- **The office's key** opens everything: the kubeconfig, never handed out.
+
+### Planned
+
+- **Fleet manager** told "always keep 2 soup trucks serving," replacing any that break down: a Deployment, self-healing.
+- **Shift change, one truck at a time,** so one is always serving: rolling update.
+- **Fill-in-the-blanks event plan + one values sheet:** Helm chart, `values.yaml`.
 
 ---
 
