@@ -16,7 +16,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    P1["1 ✔<br/>Local server"] --> P2["2 ✔<br/>Public URL"] --> P3["3 ✔<br/>Container"] --> P4["4 ✔<br/>CI"] --> P5["5 ✔<br/>Production"] --> P6["6<br/>Kubernetes + Helm"] --> P7["7<br/>CD"]
+    P1["1 ✔<br/>Local server"] --> P2["2 ✔<br/>Public URL"] --> P3["3 ✔<br/>Container"] --> P4["4 ✔<br/>CI"] --> P5["5 ✔<br/>Production"] --> P6["6 ◐<br/>Kubernetes + Helm"] --> P7["7<br/>CD"]
 ```
 
 | Phase | Problem it solves | Tool | Status |
@@ -26,7 +26,7 @@ flowchart LR
 | [3](phases/phase-3-container/README.md) | Only runs where Node.js is installed; the server can reach the whole user account | Docker, Docker Compose | ✔ Done |
 | [4](phases/phase-4-continuous-integration/README.md) | Images built by hand; nothing checks a change | GitHub Actions, GHCR | ✔ Done |
 | [5](phases/phase-5-production/README.md) | Random public address; production runs a local build | Named tunnel, Compose | ✔ Done |
-| 6 | Downtime on every deploy; a crashed app stays down | Kubernetes (k3d), Helm | Planned |
+| [6](phases/phase-6-kubernetes-and-helm/README.md) | Downtime on every deploy; a crashed app stays down | Kubernetes (k3d), Helm | ◐ In progress |
 | 7 | Deploying means typing commands on the production machine | Argo CD | Planned |
 
 ## The pipeline so far
