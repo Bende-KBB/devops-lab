@@ -14,8 +14,17 @@ k3d cluster start devops-lab                           # start again
 k3d cluster delete devops-lab                          # delete: everything inside is gone
 ```
 
+## kubectl
+
+```bash
+kubectl config current-context   # which cluster kubectl talks to
+kubectl get nodes                # the cluster's nodes and their status
+kubectl version                  # kubectl's and the cluster's versions
+```
+
 ## Common errors
 
 | Error | Cause | Fix |
 |---|---|---|
 | `Failed to create cluster ... already exists` | A cluster with that name exists | `k3d cluster list`; start it, or delete it first |
+| `The connection to the server ... was refused` | The cluster is stopped | `k3d cluster start devops-lab` |
