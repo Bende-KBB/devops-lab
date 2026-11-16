@@ -29,7 +29,7 @@ From the [Phase 5 result](../phase-5-production/result.md), ranked:
 | [1. Measure deploy downtime and crash recovery](1-measure-deploy-downtime-and-crash-recovery.md) | The problems are assumed, not measured | Baseline measurement | Done |
 | [2. Model a realistic startup time](2-model-a-realistic-startup-time.md) | The app doesn't start like a real service | Declared, simulated 5-second startup | Done |
 | [3. Install k3d](3-install-k3d.md) | No tool to create a local cluster | k3d, verified | Done |
-| 4. Create a minimal cluster | No cluster | One node, from a config file | Planned |
+| [4. Create a minimal cluster](4-create-a-minimal-cluster.md) | No cluster | One node, from a config file | Done |
 | 5. Look into the cluster | No way to see inside | `kubectl`; list the nodes | Planned |
 | 6. Add agent nodes | Only one node | Two agents | Planned |
 | 7. Run the app as a pod | Nothing of ours runs in the cluster | One pod, by hand | Planned |
