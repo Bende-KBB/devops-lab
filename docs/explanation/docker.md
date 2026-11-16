@@ -238,6 +238,8 @@ flowchart LR
 - **Project network:** Compose creates a private network for the project's containers. They reach each other by service name (`http://app:3000`); `localhost` inside a container means that container itself.
 - **One machine only:** Compose runs containers on a single engine. Spreading them over many machines, and restarting them anywhere, is what Kubernetes is for.
 - **A plugin, not a new engine:** `docker compose` is an extension of the `docker` command and uses the same engine.
+- **Several files:** `docker compose -f a.yaml -f b.yaml` merges them left to right; later files override the settings they mention. `!reset` deletes an inherited setting. This project: `compose.yaml` (development, CI) plus `compose.production.yaml` (production).
+- **`pull_policy`:** how a service's image is obtained: `missing` (download if absent), `always`, `never`, or `build` (build from source).
 
 ---
 

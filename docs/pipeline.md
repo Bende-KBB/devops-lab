@@ -41,9 +41,10 @@ flowchart LR
         A --> G["GHCR<br/>sha-&lt;commit&gt;"]
     end
     PR -->|"✔ required"| MAIN
-    subgraph LAPTOP["Laptop (by hand)"]
-        NET["docker compose up -d<br/>app + tunnel"]
+        subgraph LAPTOP["Production: laptop (by hand)"]
+        NET["compose.yaml + compose.production.yaml<br/>app (image by digest) + tunnel"]
     end
+    G -->|"pull by digest"| NET
     NET -->|"named tunnel"| EDGE["Cloudflare<br/>devops-pipe.live"] --> V["Visitor"]
 ```
 

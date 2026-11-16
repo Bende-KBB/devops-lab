@@ -28,4 +28,4 @@ No new tools: a **named tunnel** in the existing Cloudflare account, and **Compo
 |---|---|---|---|
 | [1. Graceful shutdown](1-graceful-shutdown.md) | The app only stops correctly with an `init` process | `server.js` handles `SIGTERM`/`SIGINT`; `init` removed from Compose | Done |
 | [2. Serve the app on stable domain](2-serve-the-app-on-stable-domain.md) | The public address is random | Named tunnel → `devops-pipe.live` | Done |
-| 3. Production runs the tested image | Production runs a local build | The GHCR image, by digest | Planned |
+| [3. Production runs the tested image](3-production-runs-the-tested-image.md) | Production runs a local build | The GHCR image, by digest | Done |

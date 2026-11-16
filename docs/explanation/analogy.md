@@ -103,6 +103,7 @@ flowchart LR
 
 - **The number never changes:** it's in the city's directory (DNS).
 - **The badge:** whoever holds it can take the calls, so it stays locked away (`tunnel.env`, outside Git).
+- **The street truck comes from the central depot, by serial number:** already tasted, never built in the owner's garage (the GHCR image by digest).
 
 ---
 

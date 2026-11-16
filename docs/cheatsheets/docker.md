@@ -43,6 +43,17 @@ docker run --rm -p 8081:3000 ghcr.io/bende-kbb/devops-lab:sha-<commit SHA>
 
 Images published before graceful shutdown need `--init` to stop quickly
 
+## Production
+
+```bash
+docker compose -f compose.yaml -f compose.production.yaml config --images   # which images will run (no secrets)
+docker compose -f compose.yaml -f compose.production.yaml up -d --wait
+docker compose -f compose.yaml -f compose.production.yaml ps
+docker compose -f compose.yaml -f compose.production.yaml down
+```
+
+**Never share the output of a full `docker compose config`:** it includes the tunnel token.
+
 ## Docker Compose
 
 | Command | What it does |
@@ -110,3 +121,6 @@ Images published before graceful shutdown need `--init` to stop quickly
 | `dependency failed to start: container ... is unhealthy` | The app's health check failed, so the test never started | `docker compose logs app` |
 | Cloudflare error 1033 on `devops-pipe.live` | The tunnel isn't connected | `docker compose up -d`; `docker compose logs tunnel`; check `tunnel.env` exists |
 | `502 Bad Gateway` on `devops-pipe.live` | The tunnel is up, but can't reach `app:3000` | `docker compose ps`: is `app` running and healthy? |
+| `Found orphan containers ([devops-lab-tunnel-1])` | The tunnel was started with the production file, and a command ran without it | Repeat the command with both files; or `down --remove-orphans` |
+| `Network devops-lab_default ... Resource is still in use` | A container not known to this command still uses the network | Same as above |
+| `failed to resolve reference "ghcr.io/..."... connection refused` | The registry can't be reached | Check `https://www.githubstatus.com`; retry |
