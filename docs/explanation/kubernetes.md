@@ -101,3 +101,10 @@ flowchart LR
 - **EndpointSlices** list the pods' current addresses; Kubernetes keeps them up to date.
 - **Types:** `ClusterIP` (inside the cluster only), `NodePort` and `LoadBalancer` (reachable from outside).
 - **Restarts:** a pod can survive while its container restarts (`RESTARTS` column); its IP can still change.
+
+## 9. Probes
+
+- **Readiness:** "can this pod take requests now?" Failing: removed from the Service's endpoints, not restarted.
+- **Liveness:** "is the container alive?" Failing repeatedly: the container is restarted.
+- **The kubelet** runs them, on the pod's node. Common forms: an HTTP request (`httpGet`), a TCP connection, or a command in the container.
+- **`READY 0/1` with `STATUS Running`:** the container runs, but readiness hasn't succeeded yet.

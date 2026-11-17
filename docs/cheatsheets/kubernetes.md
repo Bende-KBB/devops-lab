@@ -45,3 +45,5 @@ kubectl port-forward service/app 8081:80                          # local 8081 â
 | `Failed to create cluster ... already exists` | A cluster with that name exists | `k3d cluster list`; start it, or delete it first |
 | `The connection to the server ... was refused` | The cluster is stopped | `k3d cluster start devops-lab` |
 | `ErrImagePull`, `ImagePullBackOff` | The node can't download the image | `kubectl describe pod <name>`, Events section; the kubelet keeps retrying on its own |
+| `READY 0/1`, `STATUS Running`, for a few seconds | The readiness probe hasn't succeeded yet (the app is starting) | Normal; check `kubectl describe pod <name>` if it lasts |
+| Pods `Unknown`, `Pending`, `RESTARTS` climbing right after `k3d cluster start` | The cluster is waking up: kubelets reconnecting, containers restarted | Wait until `kubectl get pods --watch` stays stable |
