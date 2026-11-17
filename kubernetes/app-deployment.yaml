@@ -1,0 +1,21 @@
+# The app as a Deployment: Kubernetes keeps 2 pods of it running.
+#   kubectl apply -f kubernetes/app-deployment.yaml
+apiVersion: apps/v1  # Deployments belong to the "apps" part of the API
+kind: Deployment
+metadata:
+  name: app
+spec:
+  replicas: 2  # desired number of pods
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: devops-lab  # this Deployment's pods carry this label
+  template:  # every pod is created from this template
+    metadata:
+      labels:
+        app.kubernetes.io/name: devops-lab  # must match the selector above
+    spec:
+      containers:
+        - name: app
+          image: ghcr.io/bende-kbb/devops-lab:sha-4c8e3c40dfd2bbedf5ed1346bc64ef2886370390@sha256:181d664772ef4ac43e4e69cfa07ba181a3a4f9ee9528288f6ea4f0850df8ac81
+          ports:
+            - containerPort: 3000  # where server.js listens
