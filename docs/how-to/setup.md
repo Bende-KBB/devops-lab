@@ -248,6 +248,21 @@ rm kubectl kubectl.sha256
 kubectl version --client
 ```
 
+## 14. Helm
+
+```bash
+cd /tmp
+curl -fLO https://get.helm.sh/helm-<version>-linux-amd64.tar.gz
+curl -fLO https://get.helm.sh/helm-<version>-linux-amd64.tar.gz.sha256sum
+sha256sum --check helm-<version>-linux-amd64.tar.gz.sha256sum   # OK
+tar -xzf helm-<version>-linux-amd64.tar.gz
+sudo install -m 0755 linux-amd64/helm /usr/local/bin/helm
+rm -r helm-<version>-linux-amd64.tar.gz* linux-amd64
+helm version
+```
+
+Pick a release at least 14 days old on `https://github.com/helm/helm/releases`.
+
 ## Final check
 
 ```bash

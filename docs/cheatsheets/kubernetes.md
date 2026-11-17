@@ -46,6 +46,12 @@ kubectl get pods -l app.kubernetes.io/name=tunnel                        # only 
 kubectl logs deployment/tunnel | grep "Registered tunnel connection"     # connectors online
 ```
 
+## Helm
+
+```bash
+helm version
+```
+
 ## Common errors
 
 | Error | Cause | Fix |
