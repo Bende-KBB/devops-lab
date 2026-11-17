@@ -1,0 +1,3 @@
+apiVersion: v2       # Helm's chart format
+name: devops-lab     # the chart's name
+version: 0.1.0       # the chart's own version

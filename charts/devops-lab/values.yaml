@@ -1,0 +1,3 @@
+image: ghcr.io/bende-kbb/devops-lab:sha-e618b88924e38e250a71c72766bb4243707305a3@sha256:cda198f164874a80208b929cf450920699acc0cbc543b10820a3514bc0f6fae9
+replicas: 2  # pods of the app
+port: 3000   # where server.js listens; also the Service's port (the tunnel route)

@@ -130,10 +130,7 @@ flowchart LR
 - **The "open" sign:** a newly parked truck heats up its stove first; the switchboard rings it only once the sign goes up (readiness probe). A truck that stops answering the inspector's knock three times in a row gets its cook replaced (liveness probe).
 - **Shift change, one truck at a time:** a new truck parks, heats up, raises its "open" sign; only then does an old truck close its window and leave (rolling update).
 - **The courier's lines now lead into the lot:** two couriers, both with copies of the badge kept in the office safe, take calls for the fixed number and bring them to the "soup" switchboard (tunnel connectors, Secret, Service). For a while, the old truck at home and the lot both took calls; then the home truck closed.
-
-### Planned
-
-- **Fill-in-the-blanks event plan + one values sheet:** Helm chart, `values.yaml`.
+- **A fill-in-the-blanks event plan with one values sheet:** "trucks: 2, serial number: …"; changing a number on the sheet changes the plan everywhere (Helm chart, `values.yaml`). The office keeps a logbook of every version of the plan, and can return to any earlier page (release history, rollback).
 
 ---
 

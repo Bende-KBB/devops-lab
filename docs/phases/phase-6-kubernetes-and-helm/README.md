@@ -39,4 +39,4 @@ From the [Phase 5 result](../phase-5-production/result.md), ranked:
 | [11. Deploy a new version without downtime](11-deploy-a-new-version-without-downtime.md) | Every deploy causes downtime | Rolling update, measured | Done |
 | [12. Serve production traffic from the cluster](12-serve-production-traffic-from-the-cluster.md) | Users are still served by Compose | Tunnel connectors in the cluster | Done |
 | [13. Install Helm](13-install-helm.md) | No tool to package and install charts | Helm, verified | Done |
-| 14. Package the app as a chart | Values repeat; no single unit, no undo | Helm chart; running objects handed over without downtime | Planned |
+| [14. Package the app as a chart](14-package-the-app-as-a-chart.md) | Values repeat; no single unit, no undo | Helm chart; running app handed over without downtime | Done |

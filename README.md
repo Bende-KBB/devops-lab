@@ -40,7 +40,7 @@ curl -i https://devops-pipe.live
 k3d cluster stop devops-lab         # takes the site offline
 ```
 
-- **First-time setup:** `k3d cluster create --config infra/local-cluster.yaml`, then `kubectl create secret generic tunnel-token --from-env-file=tunnel.env`, then `kubectl apply -f kubernetes/`.
+- **First-time setup:** `k3d cluster create --config infra/local-cluster.yaml`, `kubectl create secret generic tunnel-token --from-env-file=tunnel.env`, `helm upgrade --install devops-lab charts/devops-lab`, `kubectl apply -f kubernetes/tunnel-deployment.yaml`.
 - **Fallback:** `compose.production.yaml` still runs the app and the tunnel with Compose (both files on every command).
 
 ## Current limitations

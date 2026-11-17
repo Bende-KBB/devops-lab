@@ -4,8 +4,10 @@ apiVersion: apps/v1  # Deployments belong to the "apps" part of the API
 kind: Deployment
 metadata:
   name: app
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service }}  # "Helm": marks the object as Helm-managed
 spec:
-  replicas: 2  # desired number of pods
+  replicas: {{ .Values.replicas }}  # desired number of pods
   selector:
     matchLabels:
       app.kubernetes.io/name: devops-lab  # this Deployment's pods carry this label
@@ -16,17 +18,17 @@ spec:
     spec:
       containers:
         - name: app
-          image: ghcr.io/bende-kbb/devops-lab:sha-e618b88924e38e250a71c72766bb4243707305a3@sha256:cda198f164874a80208b929cf450920699acc0cbc543b10820a3514bc0f6fae9
+          image: {{ .Values.image }}
           ports:
-            - containerPort: 3000  # where server.js listens
+            - containerPort: {{ .Values.port }}  # where server.js listens
           readinessProbe:  # ready for traffic? if not: removed from the Service, not restarted
             httpGet:
               path: /
-              port: 3000
+              port: {{ .Values.port }}
             periodSeconds: 2  # check every 2s
           livenessProbe:   # still alive? if not, 3 times in a row: the container is restarted
             httpGet:
               path: /
-              port: 3000
+              port: {{ .Values.port }}
             periodSeconds: 10    # check every 10s
             failureThreshold: 3  # restart only after ~30s of failures
