@@ -108,3 +108,11 @@ flowchart LR
 - **Liveness:** "is the container alive?" Failing repeatedly: the container is restarted.
 - **The kubelet** runs them, on the pod's node. Common forms: an HTTP request (`httpGet`), a TCP connection, or a command in the container.
 - **`READY 0/1` with `STATUS Running`:** the container runs, but readiness hasn't succeeded yet.
+
+## 10. Rolling updates
+
+- **Triggered by any change to a Deployment's pod template** (for example, the image).
+- **The Deployment creates a new ReplicaSet** and moves pods over, one batch at a time; old ReplicaSets are kept at 0 for rollbacks.
+- **Defaults:** up to 25% extra pods, up to 25% unavailable (rounded: with 2 replicas, one extra pod, none unavailable).
+- **Readiness gates each step;** without a readiness probe, "started" would count as ready.
+- **`kubectl rollout status deployment/<name>`** follows an update until it's finished.

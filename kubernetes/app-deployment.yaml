@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: ghcr.io/bende-kbb/devops-lab:sha-4c8e3c40dfd2bbedf5ed1346bc64ef2886370390@sha256:181d664772ef4ac43e4e69cfa07ba181a3a4f9ee9528288f6ea4f0850df8ac81
+          image: ghcr.io/bende-kbb/devops-lab:sha-e618b88924e38e250a71c72766bb4243707305a3@sha256:cda198f164874a80208b929cf450920699acc0cbc543b10820a3514bc0f6fae9
           ports:
             - containerPort: 3000  # where server.js listens
           readinessProbe:  # ready for traffic? if not: removed from the Service, not restarted
