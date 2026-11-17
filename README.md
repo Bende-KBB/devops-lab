@@ -31,17 +31,17 @@ The same test runs in CI on every pull request.
 
 ## Production
 
-**https://devops-pipe.live**: the image CI tested and published, by digest, served through a Cloudflare named tunnel while the containers run.
+**https://devops-pipe.live**: served from the local Kubernetes cluster, while it runs.
 
 ```bash
-docker compose -f compose.yaml -f compose.production.yaml up -d --wait
+k3d cluster start devops-lab
+kubectl get pods                    # app and tunnel pods Running
 curl -i https://devops-pipe.live
-docker compose -f compose.yaml -f compose.production.yaml down
+k3d cluster stop devops-lab         # takes the site offline
 ```
 
-- **Needs** `tunnel.env` (one line: `TUNNEL_TOKEN=<token>`; never committed): [Cloudflare settings](docs/how-to/cloudflare-settings.md).
-- **Use both files on every production command,** including `down`.
-- **New version:** change the digest in `compose.production.yaml` through a PR, then `git pull` and the command above.
+- **First-time setup:** `k3d cluster create --config infra/local-cluster.yaml`, then `kubectl create secret generic tunnel-token --from-env-file=tunnel.env`, then `kubectl apply -f kubernetes/`.
+- **Fallback:** `compose.production.yaml` still runs the app and the tunnel with Compose (both files on every command).
 
 ## Current limitations
 

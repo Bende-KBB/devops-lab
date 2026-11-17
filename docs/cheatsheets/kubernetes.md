@@ -40,6 +40,10 @@ kubectl rollout status deployment/app                    # follow an update unti
 kubectl get replicasets                                  # one per pod template; old ones at 0
 kubectl run measure --image=<image> --restart=Never --command -- <command>   # a one-off pod
 kubectl logs -f measure                                  # follow a pod's output live
+kubectl create secret generic tunnel-token --from-env-file=tunnel.env   # the tunnel token, from the local file
+kubectl get secret tunnel-token                                          # its size only, never the value
+kubectl get pods -l app.kubernetes.io/name=tunnel                        # only pods with this label
+kubectl logs deployment/tunnel | grep "Registered tunnel connection"     # connectors online
 ```
 
 ## Common errors
@@ -51,3 +55,4 @@ kubectl logs -f measure                                  # follow a pod's output
 | `ErrImagePull`, `ImagePullBackOff` | The node can't download the image | `kubectl describe pod <name>`, Events section; the kubelet keeps retrying on its own |
 | `READY 0/1`, `STATUS Running`, for a few seconds | The readiness probe hasn't succeeded yet (the app is starting) | Normal; check `kubectl describe pod <name>` if it lasts |
 | Pods `Unknown`, `Pending`, `RESTARTS` climbing right after `k3d cluster start` | The cluster is waking up: kubelets reconnecting, containers restarted | Wait until `kubectl get pods --watch` stays stable |
+| Cloudflare error 1033 / `530` on `devops-pipe.live` | No connector is running: the cluster is stopped | `k3d cluster start devops-lab` |

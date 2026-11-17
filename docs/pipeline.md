@@ -41,8 +41,8 @@ flowchart LR
         A --> G["GHCR<br/>sha-&lt;commit&gt;"]
     end
     PR -->|"✔ required"| MAIN
-        subgraph LAPTOP["Production: laptop (by hand)"]
-        NET["compose.yaml + compose.production.yaml<br/>app (image by digest) + tunnel"]
+        subgraph CLUSTER["Production: local Kubernetes cluster"]
+        NET["Deployment app (2 pods) + Service<br/>Deployment tunnel (2 connectors)"]
     end
     G -->|"pull by digest"| NET
     NET -->|"named tunnel"| EDGE["Cloudflare<br/>devops-pipe.live"] --> V["Visitor"]

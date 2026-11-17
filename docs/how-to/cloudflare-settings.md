@@ -35,9 +35,9 @@ No other records: the domain serves only the tunnel's route, and no email.
 
 ## The token
 
-- **Where:** `tunnel.env` in the repository folder, one line: `TUNNEL_TOKEN=<token>`. Ignored by Git; `chmod 600`.
+- **Where:** `tunnel.env` in the repository folder (one line: `TUNNEL_TOKEN=<token>`; ignored by Git; `chmod 600`), and the Kubernetes Secret `tunnel-token`, created from that file.
 - **Getting it again:** the tunnel's page in the dashboard → the connector install command contains `--token <token>`.
-- **Rotating it** (after a leak or a lost laptop): the tunnel's settings in the dashboard → refresh / rotate the token; replace the line in `tunnel.env`; `docker compose up -d`.
+- **Rotating it** (after a leak or a lost laptop): the tunnel's settings in the dashboard → refresh / rotate the token; replace the line in `tunnel.env`; `docker compose up -d`. Then recreate the Secret (kubectl delete secret tunnel-token, kubectl create secret ...) and restart the connectors (kubectl rollout restart deployment/tunnel).
 
 ## Account
 
