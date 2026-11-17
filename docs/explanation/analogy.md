@@ -125,10 +125,10 @@ flowchart LR
 - **More parking spaces, one office:** two extra spaces where trucks can park, but no office of their own; the office in the first space runs the whole lot (agent nodes, server node). All spaces sit on one plot of land: if the plot floods, every space is gone.
 - **An order form handed to the office:** "one soup truck, of this exact serial number" (a manifest, `kubectl apply`). The office picks a free space and has the truck fetched from the depot and parked there (scheduler, kubelet, pod).
 - **A private corridor from the owner's desk to that truck:** for tasting, not for customers (`kubectl port-forward`).
+- **The fleet manager,** told "always keep 2 soup trucks serving," sends a new truck the moment one leaves, without asking why (Deployment, ReplicaSet). Each truck carries the company's sticker, so the manager knows which trucks are his to count (labels, selector).
 
 ### Planned
 
-- **Fleet manager** told "always keep 2 soup trucks serving," replacing any that break down: a Deployment, self-healing.
 - **Shift change, one truck at a time,** so one is always serving: rolling update.
 - **Fill-in-the-blanks event plan + one values sheet:** Helm chart, `values.yaml`.
 

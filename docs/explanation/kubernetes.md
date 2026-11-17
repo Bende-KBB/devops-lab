@@ -72,3 +72,17 @@ spec:               # its desired state
 ```
 
 - **`kubectl apply -f <file>`** hands the manifest to the API server. The scheduler picks a node; that node's kubelet pulls the image and starts the container.
+
+## 7. Deployments, ReplicaSets, and labels
+
+```mermaid
+flowchart TB
+    D["Deployment<br/>replicas + pod template"] --> RS["ReplicaSet<br/>keeps the count"]
+    RS --> P1["pod"]
+    RS --> P2["pod"]
+```
+
+- **Deployment:** "keep N copies of this pod running." It creates a ReplicaSet; on updates, it replaces it with a new one.
+- **ReplicaSet:** counts its pods and creates or removes pods until the count matches.
+- **Labels** are key-value tags on objects (`app.kubernetes.io/name: devops-lab`). A **selector** picks objects by label: that's how a Deployment knows which pods are its own.
+- **Namespaces:** objects live in a namespace, a named group within the cluster. Without one specified, they go to `default`.

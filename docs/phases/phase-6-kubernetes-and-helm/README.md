@@ -33,7 +33,7 @@ From the [Phase 5 result](../phase-5-production/result.md), ranked:
 | [5. Look into the cluster](5-look-into-the-cluster.md) | No way to see inside | `kubectl`; list the nodes | Done |
 | [6. Add agent nodes](6-add-agent-nodes.md) | Only one node | Two agents | Done |
 | [7. Run the app as a pod](7-run-the-app-as-a-pod.md) | Nothing of ours runs in the cluster | One pod, from a manifest | Done |
-| 8. Keep pods running | A deleted pod stays deleted | Deployment, 2 pods | Planned |
+| [8. Keep pods running](8-keep-pods-running.md) | A deleted pod stays deleted | Deployment, 2 replicas | Done |
 | 9. A stable address | Pods have changing addresses | Service | Planned |
 | 10. Readiness | Kubernetes doesn't know when a pod is ready | Probes | Planned |
 | 11. Measure a rolling update | Deploy downtime | Rolling update, measured | Planned |
