@@ -122,6 +122,7 @@ flowchart LR
 - **Demolishing the lot** removes it and every truck on it; the plan remains: deleting the cluster.
 - **The office's key** opens everything: the kubeconfig, never handed out.
 - **The phone to the office:** asking "which spaces exist?", ordering "park two soup trucks" (`kubectl`). The office only takes orders from someone showing the owner's ID card (the kubeconfig).
+- **More parking spaces, one office:** two extra spaces where trucks can park, but no office of their own; the office in the first space runs the whole lot (agent nodes, server node). All spaces sit on one plot of land: if the plot floods, every space is gone.
 
 ### Planned
 

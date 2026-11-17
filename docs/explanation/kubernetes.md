@@ -48,3 +48,11 @@ flowchart TB
 - **`kubectl`** is the command-line client for the API server: it turns commands into HTTPS requests, and the answers into tables.
 - **The kubeconfig** (`~/.kube/config`) tells it where the API server is, and holds the credential it presents. The API server answers only clients that prove who they are.
 - **Contexts:** the file can describe several clusters; the **current context** selects which one `kubectl` talks to.
+
+## 5. Server and agent nodes
+
+- **Server nodes** run the control plane (and, in k3s, workloads too).
+- **Agent nodes** run workloads only. Their kubelet joins the cluster with the API server's address and a **join token**, and from then on reports its state and takes work.
+- **`kubectl` never talks to nodes:** it talks to the API server, which hands work to the kubelets. One `kubectl` controls 3 nodes or 3,000 the same way.
+- **In production,** each node is its own machine: self-managed servers or virtual machines, or a cloud provider's managed cluster, where the provider runs the control plane and the team rents worker machines.
+- **This project:** three real nodes, sharing one machine.
