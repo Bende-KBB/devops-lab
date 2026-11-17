@@ -31,7 +31,7 @@ From the [Phase 5 result](../phase-5-production/result.md), ranked:
 | [3. Install k3d](3-install-k3d.md) | No tool to create a local cluster | k3d, verified | Done |
 | [4. Create a minimal cluster](4-create-a-minimal-cluster.md) | No cluster | One node, from a config file | Done |
 | [5. Look into the cluster](5-look-into-the-cluster.md) | No way to see inside | `kubectl`; list the nodes | Done |
-| 6. Add agent nodes | Only one node | Two agents | Planned |
+| [6. Add agent nodes](6-add-agent-nodes.md) | Only one node | Two agents | Done |
 | 7. Run the app as a pod | Nothing of ours runs in the cluster | One pod, by hand | Planned |
 | 8. Keep pods running | A deleted pod stays deleted | Deployment, 2 pods | Planned |
 | 9. A stable address | Pods have changing addresses | Service | Planned |

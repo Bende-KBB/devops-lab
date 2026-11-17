@@ -19,6 +19,7 @@ k3d cluster delete devops-lab                          # delete: everything insi
 ```bash
 kubectl config current-context   # which cluster kubectl talks to
 kubectl get nodes                # the cluster's nodes and their status
+docker stats --no-stream         # memory and CPU of each node container
 kubectl version                  # kubectl's and the cluster's versions
 ```
 
