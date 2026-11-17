@@ -28,6 +28,9 @@ kubectl describe pod app                   # details and events of one pod
 kubectl logs app                           # what the pod's container printed
 kubectl port-forward pod/app 8081:3000     # local port 8081 → the pod's port 3000
 kubectl delete pod app                     # remove a pod
+kubectl apply -f kubernetes/app-deployment.yaml    # the Deployment
+kubectl get deployment,replicaset,pods -o wide     # several kinds at once
+kubectl port-forward deployment/app 8081:3000      # one of the Deployment's pods
 ```
 
 ## Common errors
