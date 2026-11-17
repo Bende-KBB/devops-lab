@@ -36,6 +36,6 @@ From the [Phase 5 result](../phase-5-production/result.md), ranked:
 | [8. Keep pods running](8-keep-pods-running.md) | A deleted pod stays deleted | Deployment, 2 replicas | Done |
 | [9. Reach the app at a stable address inside the cluster](9-reach-the-app-at-a-stable-address-inside-the-cluster.md) | Pods have changing addresses | Service `app` | Done |
 | [10. Send traffic only to ready pods](10-send-traffic-only-to-ready-pods.md) | Kubernetes doesn't know when a pod is ready | Readiness and liveness probes | Done |
-| 11. Measure a rolling update | Deploy downtime | Rolling update, measured | Planned |
+| [11. Deploy a new version without downtime](11-deploy-a-new-version-without-downtime.md) | Every deploy causes downtime | Rolling update, measured | Done |
 | 12. Production traffic through the cluster | Traffic still goes to Compose | Tunnel in the cluster | Planned |
 | 13. One source of values | The Kubernetes files repeat values | Helm chart | Planned |

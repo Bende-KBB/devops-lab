@@ -128,10 +128,10 @@ flowchart LR
 - **The fleet manager,** told "always keep 2 soup trucks serving," sends a new truck the moment one leaves, without asking why (Deployment, ReplicaSet). Each truck carries the company's sticker, so the manager knows which trucks are his to count (labels, selector).
 - **One phone number for "soup":** it rings whichever soup truck is currently parked, and keeps working as trucks come and go (Service). The lot's switchboard keeps the list of trucks to ring (EndpointSlice).
 - **The "open" sign:** a newly parked truck heats up its stove first; the switchboard rings it only once the sign goes up (readiness probe). A truck that stops answering the inspector's knock three times in a row gets its cook replaced (liveness probe).
+- **Shift change, one truck at a time:** a new truck parks, heats up, raises its "open" sign; only then does an old truck close its window and leave (rolling update).
 
 ### Planned
 
-- **Shift change, one truck at a time,** so one is always serving: rolling update.
 - **Fill-in-the-blanks event plan + one values sheet:** Helm chart, `values.yaml`.
 
 ---

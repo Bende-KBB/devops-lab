@@ -36,6 +36,10 @@ kubectl get service app                                           # its fixed IP
 kubectl get endpointslices -l kubernetes.io/service-name=app      # the pods it currently targets
 kubectl exec deployment/app -- <command>                          # run a command inside one of the pods
 kubectl port-forward service/app 8081:80                          # local 8081 → the Service's port 80
+kubectl rollout status deployment/app                    # follow an update until it's finished
+kubectl get replicasets                                  # one per pod template; old ones at 0
+kubectl run measure --image=<image> --restart=Never --command -- <command>   # a one-off pod
+kubectl logs -f measure                                  # follow a pod's output live
 ```
 
 ## Common errors
