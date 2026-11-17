@@ -1,6 +1,6 @@
 # Phase 6: Kubernetes and Helm
 
-**Status:** in progress
+**Status:** done
 
 ## The problems this phase solves
 
@@ -40,3 +40,7 @@ From the [Phase 5 result](../phase-5-production/result.md), ranked:
 | [12. Serve production traffic from the cluster](12-serve-production-traffic-from-the-cluster.md) | Users are still served by Compose | Tunnel connectors in the cluster | Done |
 | [13. Install Helm](13-install-helm.md) | No tool to package and install charts | Helm, verified | Done |
 | [14. Package the app as a chart](14-package-the-app-as-a-chart.md) | Values repeat; no single unit, no undo | Helm chart; running app handed over without downtime | Done |
+
+## Result
+
+What's fixed, what's open, ranked: [result.md](result.md).

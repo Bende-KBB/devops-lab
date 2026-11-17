@@ -16,7 +16,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    P1["1 ✔<br/>Local server"] --> P2["2 ✔<br/>Public URL"] --> P3["3 ✔<br/>Container"] --> P4["4 ✔<br/>CI"] --> P5["5 ✔<br/>Production"] --> P6["6 ◐<br/>Kubernetes + Helm"] --> P7["7<br/>CD"]
+    P1["1 ✔<br/>Local server"] --> P2["2 ✔<br/>Public URL"] --> P3["3 ✔<br/>Container"] --> P4["4 ✔<br/>CI"] --> P5["5 ✔<br/>Production"] --> P6["6 ✔<br/>Kubernetes + Helm"] --> P7["7<br/>CD"]
 ```
 
 | Phase | Problem it solves | Tool | Status |
@@ -26,7 +26,7 @@ flowchart LR
 | [3](phases/phase-3-container/README.md) | Only runs where Node.js is installed; the server can reach the whole user account | Docker, Docker Compose | ✔ Done |
 | [4](phases/phase-4-continuous-integration/README.md) | Images built by hand; nothing checks a change | GitHub Actions, GHCR | ✔ Done |
 | [5](phases/phase-5-production/README.md) | Random public address; production runs a local build | Named tunnel, Compose | ✔ Done |
-| [6](phases/phase-6-kubernetes-and-helm/README.md) | Downtime on every deploy; a crashed app stays down | Kubernetes (k3d), Helm | ◐ In progress |
+| [6](phases/phase-6-kubernetes-and-helm/README.md) | Downtime on every deploy; a crashed app stays down | Kubernetes (k3d), Helm | ✔ Done |
 | 7 | Deploying means typing commands on the production machine | Argo CD | Planned |
 
 ## The pipeline so far
@@ -79,3 +79,11 @@ flowchart LR
 - **Solution:** graceful shutdown in the app; a named tunnel to `devops-pipe.live`; production runs the CI-tested image by digest, configured in `compose.production.yaml`.
 - **Cost:** the first secret (the tunnel token) to protect; routing in the Cloudflare dashboard; a long production command.
 - **New limitations:** every deploy causes downtime; a crashed app stays down; deploying means typing commands on the production machine.
+
+### 6 · Kubernetes and Helm
+- **Problem:** every deploy caused downtime; a crashed app stayed down.
+- **Measured first:** Compose deploys failed 11 requests over ~6 s (with a declared, simulated 5-second startup); a crash stayed down until a person acted.
+- **Solution:** a local k3d cluster (3 nodes); the app as a Deployment with readiness probes behind a Service; rolling updates; production traffic moved into the cluster without failed requests; the app packaged as a Helm chart with history and rollback.
+- **Result:** 0 failed requests during deploys; deleted pods replaced automatically.
+- **Cost:** many new concepts; ~1 GB of memory; production online only while the cluster runs.
+- **New limitations:** deploying still means typing commands; the shutdown race can fail single requests.
