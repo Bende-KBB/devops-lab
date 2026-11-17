@@ -126,6 +126,7 @@ flowchart LR
 - **An order form handed to the office:** "one soup truck, of this exact serial number" (a manifest, `kubectl apply`). The office picks a free space and has the truck fetched from the depot and parked there (scheduler, kubelet, pod).
 - **A private corridor from the owner's desk to that truck:** for tasting, not for customers (`kubectl port-forward`).
 - **The fleet manager,** told "always keep 2 soup trucks serving," sends a new truck the moment one leaves, without asking why (Deployment, ReplicaSet). Each truck carries the company's sticker, so the manager knows which trucks are his to count (labels, selector).
+- **One phone number for "soup":** it rings whichever soup truck is currently parked, and keeps working as trucks come and go (Service). The lot's switchboard keeps the list of trucks to ring (EndpointSlice).
 
 ### Planned
 
