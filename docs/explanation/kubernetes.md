@@ -122,3 +122,10 @@ flowchart LR
 - **A Secret** holds sensitive values; pods receive them as environment variables (`envFrom: secretRef`) or files.
 - **Encoded, not encrypted:** stored base64-encoded in the datastore; anyone allowed to read Secrets can read the values.
 - **Kept out of Git:** created by command (`kubectl create secret generic <name> --from-env-file=<file>`).
+
+## 12. Helm
+
+- **A chart:** `Chart.yaml` (identity), `values.yaml` (each value once), `templates/` (manifests with placeholders like `{{ .Values.port }}`).
+- **A release:** an installed copy of a chart, with numbered revisions; `helm rollback <release> <revision>` restores one, as a new revision.
+- **Adopting existing objects:** label `app.kubernetes.io/managed-by=Helm`, annotations `meta.helm.sh/release-name` and `meta.helm.sh/release-namespace`.
+- **Field managers:** Kubernetes records which tool owns each field; Helm 4 refuses to change another tool's fields unless `--force-conflicts` is given.

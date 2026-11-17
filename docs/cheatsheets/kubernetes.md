@@ -50,6 +50,12 @@ kubectl logs deployment/tunnel | grep "Registered tunnel connection"     # conne
 
 ```bash
 helm version
+helm template devops-lab charts/devops-lab                    # render without applying
+helm upgrade --install devops-lab charts/devops-lab           # install or upgrade the release
+helm upgrade devops-lab charts/devops-lab --set replicas=3    # override one value
+helm list                                                     # installed releases
+helm history devops-lab                                       # revisions
+helm rollback devops-lab <revision>                           # restore a revision (adds a new one)
 ```
 
 ## Common errors
@@ -62,3 +68,4 @@ helm version
 | `READY 0/1`, `STATUS Running`, for a few seconds | The readiness probe hasn't succeeded yet (the app is starting) | Normal; check `kubectl describe pod <name>` if it lasts |
 | Pods `Unknown`, `Pending`, `RESTARTS` climbing right after `k3d cluster start` | The cluster is waking up: kubelets reconnecting, containers restarted | Wait until `kubectl get pods --watch` stays stable |
 | Cloudflare error 1033 / `530` on `devops-pipe.live` | No connector is running: the cluster is stopped | `k3d cluster start devops-lab` |
+| `UPGRADE FAILED: conflict ... with "kubectl-client-side-apply"` | A field was last written by `kubectl`; Helm won't overwrite it | Once: `helm upgrade ... --force-conflicts`; then manage the app only with Helm |
