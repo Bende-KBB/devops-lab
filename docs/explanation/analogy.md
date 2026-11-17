@@ -127,6 +127,7 @@ flowchart LR
 - **A private corridor from the owner's desk to that truck:** for tasting, not for customers (`kubectl port-forward`).
 - **The fleet manager,** told "always keep 2 soup trucks serving," sends a new truck the moment one leaves, without asking why (Deployment, ReplicaSet). Each truck carries the company's sticker, so the manager knows which trucks are his to count (labels, selector).
 - **One phone number for "soup":** it rings whichever soup truck is currently parked, and keeps working as trucks come and go (Service). The lot's switchboard keeps the list of trucks to ring (EndpointSlice).
+- **The "open" sign:** a newly parked truck heats up its stove first; the switchboard rings it only once the sign goes up (readiness probe). A truck that stops answering the inspector's knock three times in a row gets its cook replaced (liveness probe).
 
 ### Planned
 
