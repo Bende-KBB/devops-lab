@@ -9,7 +9,7 @@ metadata:
   name: devops-lab  # node containers are named k3d-devops-lab-*
 
 servers: 1  # nodes running the control plane (and workloads)
-agents: 0   # nodes running workloads only
+agents: 2   # nodes running workloads only
 
 image: rancher/k3s:v1.35.5-k3s1@sha256:2074403abe1bded11ef3dde09d457e13be8e0b64c218b1c4f8269b4565cfbc65  # 1.35.5
 
