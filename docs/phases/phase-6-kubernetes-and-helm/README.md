@@ -38,4 +38,5 @@ From the [Phase 5 result](../phase-5-production/result.md), ranked:
 | [10. Send traffic only to ready pods](10-send-traffic-only-to-ready-pods.md) | Kubernetes doesn't know when a pod is ready | Readiness and liveness probes | Done |
 | [11. Deploy a new version without downtime](11-deploy-a-new-version-without-downtime.md) | Every deploy causes downtime | Rolling update, measured | Done |
 | [12. Serve production traffic from the cluster](12-serve-production-traffic-from-the-cluster.md) | Users are still served by Compose | Tunnel connectors in the cluster | Done |
-| 13. One source of values | The Kubernetes files repeat values | Helm chart | Planned |
+| [13. Install Helm](13-install-helm.md) | No tool to package and install charts | Helm, verified | Done |
+| 14. Package the app as a chart | Values repeat; no single unit, no undo | Helm chart; running objects handed over without downtime | Planned |
