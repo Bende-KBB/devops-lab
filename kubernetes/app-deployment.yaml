@@ -19,3 +19,14 @@ spec:
           image: ghcr.io/bende-kbb/devops-lab:sha-4c8e3c40dfd2bbedf5ed1346bc64ef2886370390@sha256:181d664772ef4ac43e4e69cfa07ba181a3a4f9ee9528288f6ea4f0850df8ac81
           ports:
             - containerPort: 3000  # where server.js listens
+          readinessProbe:  # ready for traffic? if not: removed from the Service, not restarted
+            httpGet:
+              path: /
+              port: 3000
+            periodSeconds: 2  # check every 2s
+          livenessProbe:   # still alive? if not, 3 times in a row: the container is restarted
+            httpGet:
+              path: /
+              port: 3000
+            periodSeconds: 10    # check every 10s
+            failureThreshold: 3  # restart only after ~30s of failures
