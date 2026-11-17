@@ -4,11 +4,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: app  # inside the cluster: http://app
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service }}  # "Helm": marks the object as Helm-managed
 spec:
   type: ClusterIP  # reachable only inside the cluster
   selector:
     app.kubernetes.io/name: devops-lab  # send traffic to the pods with this label
   ports:
     - name: http
-      port: 3000        # clients use http://app:3000, the tunnel route's address
-      targetPort: 3000  # where server.js listens in the pods
+      port: {{ .Values.port }}       # clients use http://app:3000, the tunnel route's address
+      targetPort: {{ .Values.port }}  # where server.js listens in the pods
