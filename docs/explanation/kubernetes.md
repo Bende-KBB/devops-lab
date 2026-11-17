@@ -116,3 +116,9 @@ flowchart LR
 - **Defaults:** up to 25% extra pods, up to 25% unavailable (rounded: with 2 replicas, one extra pod, none unavailable).
 - **Readiness gates each step;** without a readiness probe, "started" would count as ready.
 - **`kubectl rollout status deployment/<name>`** follows an update until it's finished.
+
+## 11. Secrets
+
+- **A Secret** holds sensitive values; pods receive them as environment variables (`envFrom: secretRef`) or files.
+- **Encoded, not encrypted:** stored base64-encoded in the datastore; anyone allowed to read Secrets can read the values.
+- **Kept out of Git:** created by command (`kubectl create secret generic <name> --from-env-file=<file>`).
