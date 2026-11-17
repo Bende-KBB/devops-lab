@@ -10,5 +10,5 @@ spec:
     app.kubernetes.io/name: devops-lab  # send traffic to the pods with this label
   ports:
     - name: http
-      port: 80          # clients use http://app (port 80)
+      port: 3000        # clients use http://app:3000, the tunnel route's address
       targetPort: 3000  # where server.js listens in the pods
