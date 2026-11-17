@@ -1,0 +1,12 @@
+# The app as a single pod: the smallest unit Kubernetes runs.
+#   kubectl apply -f kubernetes/app-pod.yaml
+apiVersion: v1  # the core Kubernetes API
+kind: Pod       # what this file describes
+metadata:
+  name: app     # the pod's name in the cluster
+spec:           # what the pod should contain
+  containers:
+    - name: app
+      image: ghcr.io/bende-kbb/devops-lab:sha-4c8e3c40dfd2bbedf5ed1346bc64ef2886370390@sha256:181d664772ef4ac43e4e69cfa07ba181a3a4f9ee9528288f6ea4f0850df8ac81
+      ports:
+        - containerPort: 3000  # where server.js listens

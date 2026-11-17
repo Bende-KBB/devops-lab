@@ -56,3 +56,19 @@ flowchart TB
 - **`kubectl` never talks to nodes:** it talks to the API server, which hands work to the kubelets. One `kubectl` controls 3 nodes or 3,000 the same way.
 - **In production,** each node is its own machine: self-managed servers or virtual machines, or a cloud provider's managed cluster, where the provider runs the control plane and the team rents worker machines.
 - **This project:** three real nodes, sharing one machine.
+
+## 6. Pods and manifests
+
+- **A pod** is the smallest thing Kubernetes runs: one container (sometimes a few tightly coupled ones) with its own IP address in the cluster. It runs on one node, and it's disposable: a deleted pod is gone.
+- **A manifest** is a file describing an object's desired state:
+
+```yaml
+apiVersion: v1      # which part of the Kubernetes API
+kind: Pod           # what kind of object
+metadata:
+  name: app         # its name
+spec:               # its desired state
+  containers: ...
+```
+
+- **`kubectl apply -f <file>`** hands the manifest to the API server. The scheduler picks a node; that node's kubelet pulls the image and starts the container.

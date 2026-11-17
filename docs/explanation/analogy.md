@@ -123,6 +123,8 @@ flowchart LR
 - **The office's key** opens everything: the kubeconfig, never handed out.
 - **The phone to the office:** asking "which spaces exist?", ordering "park two soup trucks" (`kubectl`). The office only takes orders from someone showing the owner's ID card (the kubeconfig).
 - **More parking spaces, one office:** two extra spaces where trucks can park, but no office of their own; the office in the first space runs the whole lot (agent nodes, server node). All spaces sit on one plot of land: if the plot floods, every space is gone.
+- **An order form handed to the office:** "one soup truck, of this exact serial number" (a manifest, `kubectl apply`). The office picks a free space and has the truck fetched from the depot and parked there (scheduler, kubelet, pod).
+- **A private corridor from the owner's desk to that truck:** for tasting, not for customers (`kubectl port-forward`).
 
 ### Planned
 
