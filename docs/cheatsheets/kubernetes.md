@@ -31,6 +31,11 @@ kubectl delete pod app                     # remove a pod
 kubectl apply -f kubernetes/app-deployment.yaml    # the Deployment
 kubectl get deployment,replicaset,pods -o wide     # several kinds at once
 kubectl port-forward deployment/app 8081:3000      # one of the Deployment's pods
+kubectl apply -f kubernetes/app-service.yaml                      # the Service
+kubectl get service app                                           # its fixed IP and port
+kubectl get endpointslices -l kubernetes.io/service-name=app      # the pods it currently targets
+kubectl exec deployment/app -- <command>                          # run a command inside one of the pods
+kubectl port-forward service/app 8081:80                          # local 8081 → the Service's port 80
 ```
 
 ## Common errors

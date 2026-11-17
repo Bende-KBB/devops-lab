@@ -1,0 +1,14 @@
+# A stable address in front of the app's pods.
+#   kubectl apply -f kubernetes/app-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: app  # inside the cluster: http://app
+spec:
+  type: ClusterIP  # reachable only inside the cluster
+  selector:
+    app.kubernetes.io/name: devops-lab  # send traffic to the pods with this label
+  ports:
+    - name: http
+      port: 80          # clients use http://app (port 80)
+      targetPort: 3000  # where server.js listens in the pods

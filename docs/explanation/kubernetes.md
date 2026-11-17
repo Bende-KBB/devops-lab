@@ -86,3 +86,18 @@ flowchart TB
 - **ReplicaSet:** counts its pods and creates or removes pods until the count matches.
 - **Labels** are key-value tags on objects (`app.kubernetes.io/name: devops-lab`). A **selector** picks objects by label: that's how a Deployment knows which pods are its own.
 - **Namespaces:** objects live in a namespace, a named group within the cluster. Without one specified, they go to `default`.
+
+## 8. Services
+
+```mermaid
+flowchart LR
+    C["http://app"] --> S["Service: app<br/>fixed IP, port 80"]
+    S -->|"targetPort 3000"| P1["pod"]
+    S -->|"targetPort 3000"| P2["pod"]
+```
+
+- **A Service** is a fixed name and IP in front of the pods matching its **selector**.
+- **Cluster DNS** resolves the Service's name; from other namespaces: `app.<namespace>.svc.cluster.local`.
+- **EndpointSlices** list the pods' current addresses; Kubernetes keeps them up to date.
+- **Types:** `ClusterIP` (inside the cluster only), `NodePort` and `LoadBalancer` (reachable from outside).
+- **Restarts:** a pod can survive while its container restarts (`RESTARTS` column); its IP can still change.
