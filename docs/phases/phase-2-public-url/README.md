@@ -32,7 +32,6 @@ flowchart LR
 - **Code execution reaches far:** both programs run as the laptop user. The dedicated distro prevents accidents, not attacks.
 - **A random URL is not access control.**
 
-Full analysis: [quick tunnel analysis](quick-tunnel-analysis.md).
 
 ## Limitations
 - The URL is random and changes on every restart.
