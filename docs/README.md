@@ -9,6 +9,7 @@ flowchart TD
     D --> X["explanation/<br/>how a tool works"]
     D --> H["how-to/<br/>tasks, in order"]
     D --> CS["cheatsheets/<br/>commands to look up"]
+    D --> CV["conventions/<br/>how work is done"]
 ```
 
 **Phases** record what happened, and are never rewritten. Everything else is **living**: kept true for the current state. **Explanation** answers *why*; **how-to** gives ordered steps for a task; **cheat sheets** list commands to look up.
@@ -58,6 +59,18 @@ flowchart TD
 | [configure-the-github-repository.md](how-to/configure-the-github-repository.md) | Ruleset, pull requests, security, Actions, package: steps and settings |
 | [set-up-the-domain-and-tunnel.md](how-to/set-up-the-domain-and-tunnel.md) | Domain, Cloudflare, tunnel, token: steps and settings |
 | [run-production.md](how-to/run-production.md) | Start, stop, what starts by itself, deploy, first-time setup, fallback |
+
+### Conventions: how work is done here
+
+| Document | Covers |
+|---|---|
+| [AGENTS.md](../AGENTS.md) | Entry point for agents and people: rules, how to work with the owner |
+| [conventions/workflow.md](conventions/workflow.md) | Jira, branches, commits, PRs, the three-part step process |
+| [conventions/documentation.md](conventions/documentation.md) | History vs living docs, doc kinds, style, shapes |
+| [conventions/code-and-configuration.md](conventions/code-and-configuration.md) | Names, comments, configuration |
+| [conventions/security.md](conventions/security.md) | Pinning, verification, least privilege, secrets |
+| [conventions/engineering-principles.md](conventions/engineering-principles.md) | Measure first, simplest tool, IaC, test what you run |
+| [conventions/templates/](conventions/templates/) | Epic, task, PR, phase README, step, result |
 
 ### Cheat sheets: commands to look up
 
