@@ -38,7 +38,7 @@ jobs:
 - **`workflow_call`:** marks `ci.yml` as reusable. It never starts the workflow on its own.
 - **`on: push: branches: [main]`:** `main` accepts only merged PRs, so this means "every merge."
 - **`uses: ./.github/workflows/ci.yml`:** runs the called workflow's jobs inside this run. `./` = this repository, at this commit.
-- **`name: Publish`:** the workflow's purpose. It only tests for now; publishing arrives in step 8.
+- **`name: Publish`:** the workflow's purpose. It only tests for now.
 
 ## How it works
 

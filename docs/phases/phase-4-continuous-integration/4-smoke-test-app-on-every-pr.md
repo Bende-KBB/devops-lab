@@ -31,7 +31,7 @@ test("GET / returns 200, plain text, Hello world", async () => {
 | Bash + curl | ✘ | Hard to read and to extend |
 | Jest / Vitest | Later | Industry standard, but brings npm, `package.json`, a lockfile: too much for one test |
 | Hurl | ✘ | Very readable, but HTTP checks only; no logic |
-| k6 | Later | Built for load testing; a candidate for a later step |
+| k6 | ✘ | Built for load testing; there is no load to test |
 
 ## Why in a container
 
@@ -116,10 +116,10 @@ The attendant knocking on the serving window (the health check) only learns that
 
 ## Limitations
 
-- **Values repeat across files:** port `3000` and the app's address appear in `server.js`, `compose.yaml`, and the test's `BASE_URL`. They don't differ between environments, so this is duplication, not configuration. One source of values arrives with Helm (Phase 6).
+- **Values repeat across files:** port `3000` and the app's address appear in `server.js`, `compose.yaml`, and the test's `BASE_URL`. They don't differ between environments, so this is duplication, not configuration.
 - **The Node.js image digest is pinned in two places:** the `Dockerfile` and the `smoke-test` service. An update must change both.
 - **The tunnel isn't tested in CI:** it needs Cloudflare and the internet.
-- **The image is still thrown away after CI:** nothing is published → step 5.
+- **The image is still thrown away after CI:** nothing is published.
 
 ## Verify
 

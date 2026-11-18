@@ -4,7 +4,7 @@ Learning DevOps end-to-end: from a hello world app to a deployed service, one de
 
 - **Why and how it's built:** [docs/pipeline.md](docs/pipeline.md)
 - **All documentation:** [docs/README.md](docs/README.md)
-- **Set up a machine:** [docs/how-to/setup.md](docs/how-to/setup.md)
+- **Set up a machine:** [docs/how-to/set-up-the-development-machine.md](docs/how-to/set-up-the-development-machine.md)
 
 ## Run with Docker Compose
 
@@ -40,15 +40,14 @@ curl -i https://devops-pipe.live
 k3d cluster stop devops-lab         # takes the site offline
 ```
 
-- **First-time setup:** `k3d cluster create --config infra/local-cluster.yaml`, `kubectl create secret generic tunnel-token --from-env-file=tunnel.env`, `helm upgrade --install devops-lab charts/devops-lab`, `kubectl apply -f kubernetes/tunnel-deployment.yaml`.
-- **Fallback:** `compose.production.yaml` still runs the app and the tunnel with Compose (both files on every command).
+Start, stop, deploy, first-time setup, and the Compose fallback: [run production](docs/how-to/run-production.md).
 
 ## Current limitations
 
-- The image is built by hand and exists only on this machine.
-- Base image updates are manual: security patches arrive only when the pinned digest is updated.
-- Offline when the laptop sleeps or a container crashes, and nobody notices.
-- Production runs on the laptop: the domain serves the app only while the containers run.
-- Deploying means typing commands on the production machine.
-- Every deploy causes a short downtime.
-- Mistakes such as a typo are only discovered when a request arrives.
+- **Production runs on this laptop:** the domain serves the app only while the distro and the cluster run.
+- **Deploying means typing commands:** a new version is a digest change in `charts/devops-lab/values.yaml`, then `helm upgrade` by hand.
+- **Deleting a pod can fail single requests:** a shutdown race between leaving the Service and stopping.
+- **Updates are manual:** base images, pinned actions, and the deployed digest.
+- **Settings live outside Git:** GitHub and Cloudflare are configured in their web interfaces.
+
+Ranked, with evidence: [Phase 6 result](docs/phases/phase-6-kubernetes-and-helm/result.md).

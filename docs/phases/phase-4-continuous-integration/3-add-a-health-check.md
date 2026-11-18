@@ -61,7 +61,7 @@ stateDiagram-v2
 
 ## Health check vs smoke test
 
-| | Health check | Smoke test (next step) |
+| | Health check | Smoke test |
 |---|---|---|
 | Question | Is the app alive and ready? | Does it behave correctly? |
 | Who asks | The platform (Docker, later Kubernetes) | The pipeline (CI) |
@@ -71,7 +71,7 @@ stateDiagram-v2
 ## Why it's in the CI phase
 
 - **CI needs it now:** to know when the app is ready before testing it.
-- **It's also a runtime feature:** Kubernetes uses the same idea, as *liveness* and *readiness probes*, in Phase 5.
+- **It's also a runtime feature:** whatever runs the container can use it to decide whether the app is alive and ready.
 
 ## The analogy
 

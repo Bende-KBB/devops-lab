@@ -16,7 +16,7 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    P1["1 ✔<br/>Local server"] --> P2["2 ✔<br/>Public URL"] --> P3["3 ✔<br/>Container"] --> P4["4 ✔<br/>CI"] --> P5["5 ✔<br/>Production"] --> P6["6 ✔<br/>Kubernetes + Helm"] --> P7["7<br/>CD"]
+    P1["1 ✔<br/>Local server"] --> P2["2 ✔<br/>Public URL"] --> P3["3 ✔<br/>Container"] --> P4["4 ✔<br/>CI"] --> P5["5 ✔<br/>Production"] --> P6["6 ✔<br/>Kubernetes + Helm"] --> P7["7<br/>24/7"] --> P8["8<br/>CD"]
 ```
 
 | Phase | Problem it solves | Tool | Status |
@@ -27,7 +27,8 @@ flowchart LR
 | [4](phases/phase-4-continuous-integration/README.md) | Images built by hand; nothing checks a change | GitHub Actions, GHCR | ✔ Done |
 | [5](phases/phase-5-production/README.md) | Random public address; production runs a local build | Named tunnel, Compose | ✔ Done |
 | [6](phases/phase-6-kubernetes-and-helm/README.md) | Downtime on every deploy; a crashed app stays down | Kubernetes (k3d), Helm | ✔ Done |
-| 7 | Deploying means typing commands on the production machine | Argo CD | Planned |
+| 7 | Online only while the laptop runs | k3s on cloud VMs (Terraform: to be decided) | Planned |
+| 8 | Deploying means typing commands on the production machine | Argo CD | Planned |
 
 ## The pipeline so far
 
@@ -41,7 +42,7 @@ flowchart LR
         A --> G["GHCR<br/>sha-&lt;commit&gt;"]
     end
     PR -->|"✔ required"| MAIN
-        subgraph CLUSTER["Production: local Kubernetes cluster"]
+    subgraph CLUSTER["Production: local Kubernetes cluster"]
         NET["Deployment app (2 pods) + Service<br/>Deployment tunnel (2 connectors)"]
     end
     G -->|"pull by digest"| NET

@@ -84,7 +84,7 @@ flowchart TB
 ## Security
 
 - **Uploading an artifact needs no extra permission:** it uses a short-lived token scoped to the run, not `permissions:`.
-- **Pull requests can change workflow files:** a PR could switch `save-image` on, or edit anything else. External PRs run only after the owner approves them (see [repository settings](../../how-to/repository-settings.md)), with a read-only token.
+- **Pull requests can change workflow files:** a PR could switch `save-image` on, or edit anything else. External PRs run only after the owner approves them (see [GitHub repository setup](../../how-to/configure-the-github-repository.md)), with a read-only token.
 
 ## Names
 

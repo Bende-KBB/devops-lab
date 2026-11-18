@@ -7,7 +7,7 @@
 - **The image is built by hand:** nothing checks that a change still builds or still works. A broken change can be merged unnoticed.
 - **The image exists only on the laptop:** nothing else can get it.
 - **`main` accepts anything:** a failing change can still be merged.
-- **Nobody knows when the app is ready:** "running" isn't "ready." The health check added for this is also a runtime feature that Kubernetes builds on in Phase 5.
+- **Nobody knows when the app is ready:** "running" isn't "ready."
 
 ## The tool: GitHub Actions
 

@@ -50,7 +50,7 @@ flowchart LR
 ```
 
 - **A fresh machine every time:** nothing from a laptop is on the runner. If it builds there, it builds anywhere.
-- **The image is thrown away:** this step only proves the build works. Publishing comes in step 3.
+- **The image is thrown away:** this step only proves the build works.
 
 ## The analogy
 
@@ -73,7 +73,7 @@ Every proposed change to the truck's construction plan now goes to an **inspecti
 ## Limitations
 
 - **Runner VMs can't be pinned:** GitHub updates them weekly; only the OS version is fixed. Accepted: the image's content comes from the pinned base image and the repository, not the runner.
-- **Passing build ≠ working app:** the build can succeed while the server is broken → step 2.
+- **Passing build ≠ working app:** the build can succeed while the server is broken.
 
 ## Verify
 

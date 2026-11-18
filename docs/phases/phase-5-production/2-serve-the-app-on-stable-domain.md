@@ -96,7 +96,7 @@ See [analogy](../../explanation/analogy.md), Phase 5: the courier now has a fixe
 
 - **Production runs on the laptop:** the domain serves the app only while the laptop and the containers run.
 - **Production still runs a local build:** `docker compose up` builds from the files on disk, not the tested image.
-- **Routing lives in the Cloudflare dashboard,** not in Git; recorded in [Cloudflare settings](../../how-to/cloudflare-settings.md).
+- **Routing lives in the Cloudflare dashboard,** not in Git; recorded in [domain and tunnel setup](../../how-to/set-up-the-domain-and-tunnel.md).
 - **One secret on one laptop:** a lost laptop means rotating the token.
 
 ## Verify

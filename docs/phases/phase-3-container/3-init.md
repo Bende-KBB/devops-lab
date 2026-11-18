@@ -42,8 +42,6 @@ Without `init`, the same request goes straight to Node.js as PID 1, is ignored, 
 | `time docker compose down` | ≈ 10 s | ≈ 1 s |
 | How the app ends | Killed (`SIGKILL`) | Stops on request (`SIGTERM`) |
 
-This matters later: Kubernetes stops containers the same way on every update.
-
 ## Verify
 
 ```bash

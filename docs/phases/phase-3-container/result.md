@@ -41,7 +41,7 @@ flowchart LR
 | Base image updates are manual | Since step 6, security patches arrive only when someone updates the digest. Automation (Dependabot, Renovate) is out of scope |
 | Container user ID 1000 matches the host user's ID | An escaped process would have that user's rights (not root's). A unique high ID is a possible refinement |
 
-## Limitations carried into the next phase
+## Open limitations
 
-- The image is built by hand and exists only on this laptop → **Phase 4: CI**.
-- A crashed container stays down → **Phase 5: Kubernetes**.
+- The image is built by hand and exists only on this laptop.
+- A crashed container stays down.

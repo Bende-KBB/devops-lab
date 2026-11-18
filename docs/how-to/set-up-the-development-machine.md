@@ -1,7 +1,7 @@
-# Development Machine Setup
+# Set Up the Development Machine
 
 **Applies to:** Windows 10/11 with WSL2.
-**Result:** an isolated Linux environment (`devops-lab`) with Git, GitHub SSH access, its own Docker Engine, cloudflared, this repository, and VS Code connected to it.
+**Result:** an isolated Linux environment (`devops-lab`) with Git, GitHub SSH access, its own Docker Engine, k3d, kubectl, Helm, this repository, and VS Code connected to it.
 
 Every step ends with a **Check**. Don't continue until it passes.
 
@@ -24,7 +24,7 @@ Windows
     └── devops-lab        ← this project (Ubuntu 26.04 LTS)
         ├── Git + own SSH key → GitHub
         ├── Docker Engine (own, isolated)
-        ├── cloudflared
+        ├── k3d, kubectl, Helm
         └── ~/devops-lab (the repository)
 ```
 

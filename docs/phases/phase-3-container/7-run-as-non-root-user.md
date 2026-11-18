@@ -44,7 +44,7 @@ Until now, the cook in the food truck held the **master key** to the whole truck
 
 ## Nuance: user IDs are shared
 
-The kernel identifies users by **number**, not name. The host user is usually also ID 1000, so the host displays the container's process under that user's name. An escaped attacker would hold that user's rights: far less than root, but not nothing. Stricter setups use a high, unused ID (for example 10001) that matches no host user. Possible later refinement.
+The kernel identifies users by **number**, not name. The host user is usually also ID 1000, so the host displays the container's process under that user's name. An escaped attacker would hold that user's rights: far less than root, but not nothing. Stricter setups use a high, unused ID (for example 10001) that matches no host user. Not done here.
 
 ## Verify
 

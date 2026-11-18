@@ -1,5 +1,5 @@
 # A stable address in front of the app's pods.
-#   kubectl apply -f kubernetes/app-service.yaml
+#   Installed by Helm: helm upgrade --install devops-lab charts/devops-lab
 apiVersion: v1
 kind: Service
 metadata:

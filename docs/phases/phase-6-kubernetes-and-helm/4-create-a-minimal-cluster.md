@@ -59,7 +59,7 @@ k3d cluster delete devops-lab                          # delete: everything insi
 
 | Decision | Why |
 |---|---|
-| One server, no agents | The smallest cluster; more nodes come in a later step |
+| One server, no agents | The smallest working cluster |
 | k3s version pinned by digest | The same Kubernetes every time it's created |
 | Traefik disabled | Unused software is unused attack surface |
 | Blueprint in `infra/` | Cluster setup separate from the app's Kubernetes files |

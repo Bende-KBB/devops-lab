@@ -134,7 +134,16 @@ flowchart LR
 
 ---
 
-## Phase 7: Continuous deployment *(planned)*
+## Phase 7: Running 24/7 *(planned)*
+
+```mermaid
+flowchart LR
+    LOT["Permanent lot in the city,<br/>open day and night<br/>(cluster on cloud VMs)"] --- SP["Spaces on separate plots:<br/>one flood doesn't close them all<br/>(nodes on separate machines)"]
+```
+
+---
+
+## Phase 8: Continuous deployment *(planned)*
 
 ```mermaid
 flowchart LR

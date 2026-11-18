@@ -48,5 +48,5 @@ docker compose up -d --build
 docker compose ps                 # app: Up
 curl -i http://localhost:8080     # 200 Hello world
 curl -i http://localhost:3000     # connection refused: not published
-time docker compose down          # still ~10 s: fixed in step 3
+time docker compose down          # still ~10 s
 ```

@@ -5,7 +5,7 @@
 ## Problem
 
 1. **Two terminals:** the app runs in the background, but `cloudflared` still runs in the foreground in a second terminal. Close it and the site is down.
-2. **cloudflared runs as the Linux user:** a vulnerability in it could reach the SSH agent, the repository, and Windows files (risk 3 in the [tunnel analysis](../phase-2-public-url/quick-tunnel-analysis.md)).
+2. **cloudflared runs as the Linux user:** a vulnerability in it could reach the SSH agent, the repository, and Windows files.
 
 ## Change
 

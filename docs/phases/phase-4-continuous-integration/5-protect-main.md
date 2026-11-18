@@ -10,7 +10,7 @@
 
 ## Change
 
-A GitHub **ruleset** on `main`, with no bypass, plus pull request and security settings. All values and reasons: [Repository settings](../../how-to/repository-settings.md).
+A GitHub **ruleset** on `main`, with no bypass, plus pull request and security settings. All values and reasons: [GitHub repository setup](../../how-to/configure-the-github-repository.md).
 
 - **Pull request required:** no direct pushes.
 - **`build-and-test` must pass,** against an up-to-date branch.
@@ -56,7 +56,7 @@ Until now, the inspection station wrote its verdict on every proposal, but anyon
 ## Limitations
 
 - **No second reviewer:** approvals are set to 0. With a single owner, CI is the only gate.
-- **Settings aren't code:** they live in GitHub, recorded only in [Repository settings](../../how-to/repository-settings.md).
+- **Settings aren't code:** they live in GitHub, recorded only in [GitHub repository setup](../../how-to/configure-the-github-repository.md).
 - **The required check is tied to a name:** renaming the CI job blocks every PR until the ruleset is updated.
 
 ## Verify

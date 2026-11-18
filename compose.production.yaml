@@ -1,4 +1,5 @@
-# Production: compose.yaml plus these changes.
+# Fallback production with Compose: compose.yaml plus these changes.
+# Production normally runs in the cluster (charts/devops-lab); this image may be older.
 # Run every command with both files:
 #   docker compose -f compose.yaml -f compose.production.yaml <command>
 services:

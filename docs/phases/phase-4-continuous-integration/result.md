@@ -43,7 +43,7 @@ flowchart LR
 
 | Limitation | Why it matters |
 |---|---|
-| Settings live in the GitHub UI, not in Git | No review, no history; recorded only in [repository settings](../../how-to/repository-settings.md) |
+| Settings live in the GitHub UI, not in Git | No review, no history; recorded only in [GitHub repository setup](../../how-to/configure-the-github-repository.md) |
 | Runner VMs can't be pinned | GitHub updates them; only the OS version is fixed |
 | Updates of pinned actions and images are manual | Patches arrive only when someone updates a SHA or digest |
 | Values repeat across files | Port `3000`, the app's address, and the Node.js digest appear in several files |

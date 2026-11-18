@@ -91,7 +91,7 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    C["http://app"] --> S["Service: app<br/>fixed IP, port 80"]
+    C["http://app:3000"] --> S["Service: app<br/>fixed IP, port 3000"]
     S -->|"targetPort 3000"| P1["pod"]
     S -->|"targetPort 3000"| P2["pod"]
 ```
