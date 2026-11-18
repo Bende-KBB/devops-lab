@@ -4,6 +4,7 @@ Learning DevOps end-to-end: from a hello world app to a deployed service, one de
 
 - **Why and how it's built:** [docs/pipeline.md](docs/pipeline.md)
 - **All documentation:** [docs/README.md](docs/README.md)
+- **How work is done here (people and AI agents):** [AGENTS.md](AGENTS.md)
 - **Set up a machine:** [docs/how-to/set-up-the-development-machine.md](docs/how-to/set-up-the-development-machine.md)
 
 ## Run with Docker Compose
