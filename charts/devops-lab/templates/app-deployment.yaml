@@ -1,5 +1,5 @@
 # The app as a Deployment: Kubernetes keeps 2 pods of it running.
-#   kubectl apply -f kubernetes/app-deployment.yaml
+#   Installed by Helm: helm upgrade --install devops-lab charts/devops-lab
 apiVersion: apps/v1  # Deployments belong to the "apps" part of the API
 kind: Deployment
 metadata:

@@ -14,48 +14,59 @@ k3d cluster start devops-lab                           # start again
 k3d cluster delete devops-lab                          # delete: everything inside is gone
 ```
 
-## kubectl
+## Look around
 
 ```bash
-kubectl config current-context   # which cluster kubectl talks to
-kubectl get nodes                # the cluster's nodes and their status
-docker stats --no-stream         # memory and CPU of each node container
-kubectl version                  # kubectl's and the cluster's versions
-kubectl apply -f kubernetes/app-pod.yaml   # create or update what the file describes
-kubectl get pods -o wide                   # pods, with their node and IP
-kubectl get pods --watch                   # keep listing changes (Ctrl+C to stop)
-kubectl describe pod app                   # details and events of one pod
-kubectl logs app                           # what the pod's container printed
-kubectl port-forward pod/app 8081:3000     # local port 8081 → the pod's port 3000
-kubectl delete pod app                     # remove a pod
-kubectl apply -f kubernetes/app-deployment.yaml    # the Deployment
-kubectl get deployment,replicaset,pods -o wide     # several kinds at once
-kubectl port-forward deployment/app 8081:3000      # one of the Deployment's pods
-kubectl apply -f kubernetes/app-service.yaml                      # the Service
-kubectl get service app                                           # its fixed IP and port
-kubectl get endpointslices -l kubernetes.io/service-name=app      # the pods it currently targets
-kubectl exec deployment/app -- <command>                          # run a command inside one of the pods
-kubectl port-forward service/app 8081:80                          # local 8081 → the Service's port 80
-kubectl rollout status deployment/app                    # follow an update until it's finished
-kubectl get replicasets                                  # one per pod template; old ones at 0
-kubectl run measure --image=<image> --restart=Never --command -- <command>   # a one-off pod
-kubectl logs -f measure                                  # follow a pod's output live
-kubectl create secret generic tunnel-token --from-env-file=tunnel.env   # the tunnel token, from the local file
-kubectl get secret tunnel-token                                          # its size only, never the value
-kubectl get pods -l app.kubernetes.io/name=tunnel                        # only pods with this label
-kubectl logs deployment/tunnel | grep "Registered tunnel connection"     # connectors online
+kubectl config current-context                                  # which cluster kubectl talks to
+kubectl version                                                 # kubectl's and the cluster's versions
+kubectl get nodes                                               # nodes and their status
+kubectl get pods -o wide                                        # pods, with their node and IP
+kubectl get pods --watch                                        # keep listing changes (Ctrl+C to stop)
+kubectl get pods -l app.kubernetes.io/name=tunnel               # only pods with this label
+kubectl get deployment,replicaset,pods -o wide                  # several kinds at once
+kubectl get service app                                         # the Service's fixed IP and port
+kubectl get endpointslices -l kubernetes.io/service-name=app    # the pods the Service currently targets
+docker stats --no-stream                                        # memory and CPU of each node container
 ```
 
-## Helm
+## Investigate
 
 ```bash
-helm version
+kubectl describe pod <pod>                                      # details and events of one pod
+kubectl logs <pod>                                              # what a pod's container printed
+kubectl logs -f <pod>                                           # follow it live
+kubectl logs deployment/tunnel | grep "Registered tunnel connection"   # connectors online
+kubectl exec deployment/app -- <command>                        # run a command inside one of the pods
+kubectl port-forward service/app 8081:3000                      # local 8081 → the Service's port 3000
+kubectl run measure --image=<image> --restart=Never --command -- <command>   # a one-off pod
+```
+
+## Change
+
+The app is a Helm release (below). The tunnel and its Secret are managed with kubectl:
+
+```bash
+kubectl create secret generic tunnel-token --from-env-file=tunnel.env   # the tunnel token, from the local file
+kubectl get secret tunnel-token                                          # its size only, never the value
+kubectl apply -f kubernetes/tunnel-deployment.yaml                       # the tunnel connectors
+kubectl rollout restart deployment/tunnel                                # restart them (after a token change)
+kubectl rollout status deployment/app                                    # follow an update until it's finished
+kubectl get replicasets                                                  # one per pod template; old ones at 0
+kubectl delete pod <pod>                                                 # remove a pod; its Deployment replaces it
+```
+
+**Never run `kubectl get secret tunnel-token -o yaml`:** it prints the token, only base64-encoded.
+
+## Helm: the app's release
+
+```bash
 helm template devops-lab charts/devops-lab                    # render without applying
 helm upgrade --install devops-lab charts/devops-lab           # install or upgrade the release
 helm upgrade devops-lab charts/devops-lab --set replicas=3    # override one value
 helm list                                                     # installed releases
 helm history devops-lab                                       # revisions
 helm rollback devops-lab <revision>                           # restore a revision (adds a new one)
+helm version
 ```
 
 ## Common errors

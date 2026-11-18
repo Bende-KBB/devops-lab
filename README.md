@@ -45,10 +45,10 @@ k3d cluster stop devops-lab         # takes the site offline
 
 ## Current limitations
 
-- The image is built by hand and exists only on this machine.
-- Base image updates are manual: security patches arrive only when the pinned digest is updated.
-- Offline when the laptop sleeps or a container crashes, and nobody notices.
-- Production runs on the laptop: the domain serves the app only while the containers run.
-- Deploying means typing commands on the production machine.
-- Every deploy causes a short downtime.
-- Mistakes such as a typo are only discovered when a request arrives.
+- **Production runs on this laptop:** the domain serves the app only while the distro and the cluster run.
+- **Deploying means typing commands:** a new version is a digest change in `charts/devops-lab/values.yaml`, then `helm upgrade` by hand.
+- **Deleting a pod can fail single requests:** a shutdown race between leaving the Service and stopping.
+- **Updates are manual:** base images, pinned actions, and the deployed digest.
+- **Settings live outside Git:** GitHub and Cloudflare are configured in their web interfaces.
+
+Ranked, with evidence: [Phase 6 result](docs/phases/phase-6-kubernetes-and-helm/result.md).

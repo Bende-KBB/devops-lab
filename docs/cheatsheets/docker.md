@@ -8,7 +8,6 @@ Commands, this project's files line by line, and common errors. Concepts: [expla
 docker compose up -d             # build (always, from source) and start in the background
 docker compose ps                # list this project's containers
 docker compose logs app          # what the app printed
-docker compose logs tunnel       # "Registered tunnel connection" = online at devops-pipe.live
 curl -i http://localhost:8080    # test
 docker compose down              # stop and remove containers and network
 ```
@@ -41,14 +40,17 @@ docker pull ghcr.io/bende-kbb/devops-lab:sha-<commit SHA>
 docker run --rm -p 8081:3000 ghcr.io/bende-kbb/devops-lab:sha-<commit SHA>
 ```
 
-Images published before graceful shutdown need `--init` to stop quickly
+Images published before graceful shutdown need `--init` to stop quickly.
 
-## Production
+## Production fallback (Compose)
+
+Production normally runs in the cluster: [cheatsheets/kubernetes.md](kubernetes.md). This fallback runs the app and the tunnel with Compose instead; never run both.
 
 ```bash
 docker compose -f compose.yaml -f compose.production.yaml config --images   # which images will run (no secrets)
 docker compose -f compose.yaml -f compose.production.yaml up -d --wait
 docker compose -f compose.yaml -f compose.production.yaml ps
+docker compose -f compose.yaml -f compose.production.yaml logs tunnel   # "Registered tunnel connection" = online
 docker compose -f compose.yaml -f compose.production.yaml down
 ```
 
@@ -119,8 +121,8 @@ docker compose -f compose.yaml -f compose.production.yaml down
 | Tunnel URL gives 502 Bad Gateway | Tunnel can't reach the app | Check `http://app:3000` (service name, **container** port) and that `app` is Up |
 | `container ... is unhealthy` | The health check keeps failing | `docker compose logs app`; `docker inspect --format '{{json .State.Health}}' devops-lab-app-1` shows the last check results |
 | `dependency failed to start: container ... is unhealthy` | The app's health check failed, so the test never started | `docker compose logs app` |
-| Cloudflare error 1033 on `devops-pipe.live` | The tunnel isn't connected | `docker compose up -d`; `docker compose logs tunnel`; check `tunnel.env` exists |
-| `502 Bad Gateway` on `devops-pipe.live` | The tunnel is up, but can't reach `app:3000` | `docker compose ps`: is `app` running and healthy? |
+| Cloudflare error 1033 on `devops-pipe.live` (fallback running) | The Compose tunnel isn't connected | Production commands with both files; `logs tunnel`; check `tunnel.env` exists |
+| `502 Bad Gateway` on `devops-pipe.live` (fallback running) | The tunnel is up, but can't reach `app:3000` | `ps` with both files: is `app` running and healthy? |
 | `Found orphan containers ([devops-lab-tunnel-1])` | The tunnel was started with the production file, and a command ran without it | Repeat the command with both files; or `down --remove-orphans` |
 | `Network devops-lab_default ... Resource is still in use` | A container not known to this command still uses the network | Same as above |
 | `failed to resolve reference "ghcr.io/..."... connection refused` | The registry can't be reached | Check `https://www.githubstatus.com`; retry |
