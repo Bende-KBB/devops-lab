@@ -4,7 +4,7 @@ Learning DevOps end-to-end: from a hello world app to a deployed service, one de
 
 - **Why and how it's built:** [docs/pipeline.md](docs/pipeline.md)
 - **All documentation:** [docs/README.md](docs/README.md)
-- **Set up a machine:** [docs/how-to/setup.md](docs/how-to/setup.md)
+- **Set up a machine:** [docs/how-to/set-up-the-development-machine.md](docs/how-to/set-up-the-development-machine.md)
 
 ## Run with Docker Compose
 
@@ -40,8 +40,7 @@ curl -i https://devops-pipe.live
 k3d cluster stop devops-lab         # takes the site offline
 ```
 
-- **First-time setup:** `k3d cluster create --config infra/local-cluster.yaml`, `kubectl create secret generic tunnel-token --from-env-file=tunnel.env`, `helm upgrade --install devops-lab charts/devops-lab`, `kubectl apply -f kubernetes/tunnel-deployment.yaml`.
-- **Fallback:** `compose.production.yaml` still runs the app and the tunnel with Compose (both files on every command).
+Start, stop, deploy, first-time setup, and the Compose fallback: [run production](docs/how-to/run-production.md).
 
 ## Current limitations
 

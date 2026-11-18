@@ -1,6 +1,6 @@
 # Docker Cheat Sheet
 
-Commands, this project's files line by line, and common errors. Concepts: [explanation/docker.md](../explanation/docker.md). Installation: [how-to/setup.md](../how-to/setup.md).
+Commands, this project's files line by line, and common errors. Concepts: [explanation/docker.md](../explanation/docker.md). Installation: [how-to/set-up-the-development-machine.md](../how-to/set-up-the-development-machine.md).
 
 ## This project
 

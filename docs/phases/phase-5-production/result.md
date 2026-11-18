@@ -33,7 +33,7 @@ flowchart LR
 | Limitation | Why it matters |
 |---|---|
 | A secret on the laptop (`tunnel.env`) | Losing the laptop means rotating the token |
-| Tunnel routing lives in the Cloudflare dashboard | Not in Git; recorded in [Cloudflare settings](../../how-to/cloudflare-settings.md) |
+| Tunnel routing lives in the Cloudflare dashboard | Not in Git; recorded in [domain and tunnel setup](../../how-to/set-up-the-domain-and-tunnel.md) |
 | `docker compose config` prints the token | Full configuration output must never be shared |
 | Production commands need both Compose files | Forgetting one leaves orphan containers |
 

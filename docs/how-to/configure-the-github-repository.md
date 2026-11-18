@@ -1,8 +1,35 @@
-# Repository Settings
+# Configure the GitHub Repository
 
-GitHub settings for this repository. They live in GitHub, **not in Git**: this page is their only record. Change both together.
+**Result:** `main` accepts only reviewed, passing changes; only chosen, pinned actions run; secrets are blocked before they're pushed; the published image is public.
 
-## Ruleset `protect-main`
+These settings live in GitHub, **not in Git**: this page is both the procedure and the record. Change both together.
+
+## Steps
+
+Some settings depend on things that exist only after the first workflow runs, so the order matters:
+
+```mermaid
+flowchart LR
+    A["1. Pull request settings"] --> B["2. Security"]
+    B --> C["3. Actions"]
+    C --> D["4. First PR: CI runs once"]
+    D --> E["5. Ruleset on main<br/>(needs the check's name)"]
+    E --> F["6. First merge: image published"]
+    F --> G["7. Package: public"]
+```
+
+1. **Pull request settings:** **Settings → General → Pull Requests**, as in the table below.
+2. **Security:** **Settings → Advanced Security**: secret scanning and push protection on.
+3. **Actions:** **Settings → Actions → General**, as in the table below. The allowed-actions field is a comma-separated list.
+4. **Open a first pull request,** so the CI check `build-and-test` runs once. The ruleset can only require a check GitHub has seen.
+5. **Ruleset:** **Settings → Rules → Rulesets → New branch ruleset**, as in the table below. Leave the bypass list **empty**.
+6. **Merge,** so the first image is published to GHCR.
+7. **Package:** **Repository → Packages → `devops-lab` → Package settings**: visibility public, connected to the repository.
+8. **Verify** (below).
+
+## Settings at a glance
+
+### Ruleset `protect-main`
 
 **Settings → Rules → Rulesets**
 
@@ -23,7 +50,7 @@ GitHub settings for this repository. They live in GitHub, **not in Git**: this p
 
 **Renaming the CI job** changes the check's name. The ruleset would then wait forever for a check called `build-and-test` that never comes, and every PR would be blocked. Update the ruleset in the same change.
 
-## Pull requests
+### Pull requests
 
 **Settings → General → Pull Requests**
 
@@ -37,7 +64,7 @@ GitHub settings for this repository. They live in GitHub, **not in Git**: this p
 
 Locally, `git config --global fetch.prune true` removes references to deleted branches on the next fetch.
 
-## Security
+### Security
 
 **Settings → Advanced Security**
 
@@ -46,7 +73,7 @@ Locally, `git config --global fetch.prune true` removes references to deleted br
 | Secret scanning | On | Detects tokens and keys in the repository |
 | Push protection | On | **Blocks a push** containing something that looks like a secret, before it becomes public |
 
-## Actions
+### Actions
 
 **Settings → Actions → General**
 
@@ -62,7 +89,7 @@ Locally, `git config --global fetch.prune true` removes references to deleted br
 | Allow GitHub Actions to create and approve pull requests | Off | A workflow must never approve its own changes |
 | Artifact and log retention | 90 days (default) | Individual artifacts can set less (`retention-days`) |
 
-## Packages
+### Packages
 
 **Repository → Packages → `devops-lab` → Package settings**
 
@@ -80,6 +107,11 @@ git push                       # rejected: repository rule violations
 git reset --hard origin/main   # discard the local test commit
 ```
 
-## Limitation
+```bash
+docker logout ghcr.io
+docker pull ghcr.io/bende-kbb/devops-lab:sha-<commit SHA>   # works without credentials: the package is public
+```
 
-Settings changed in the GitHub UI leave no trace in Git: no review, no history, and nothing to restore from. Managing them as code (for example with Terraform's GitHub provider) is a possible later step.
+## Limitations
+
+- **Settings live in the GitHub UI:** no review, no history, nothing to restore from. Terraform's GitHub provider could manage them as code.
